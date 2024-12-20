@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
-export default function Error() {
+export default function LeaderboardItem() {
     return (
         <View>
-            <Text>Ini Error Page</Text>
+            <Text>Ini Leaderboard Item</Text>
         </View>
     )
 }

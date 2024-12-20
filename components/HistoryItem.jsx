@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
-export default function Error() {
+export default function HistoryItem() {
     return (
         <View>
-            <Text>Ini Error Page</Text>
+            <Text>Ini History Item</Text>
         </View>
     )
 }
