@@ -9,7 +9,22 @@ export default function TabLayout() {
                 screenOptions={{ tabBarActiveTintColor: 'green', tabBarInactiveTintColor: 'gray' }}>
                 <Tabs.Screen
                     name="index"
-                    screenOptions={{}}
+                    options={{
+                        headerShown: false,
+                        tabBarIcon: (({ color }) => <Ionicons name='home' size={20} color={color} />),
+                        tabBarLabel: 'Home'
+                    }}
+                />
+                <Tabs.Screen
+                    name="history"
+                    options={{
+                        headerShown: false,
+                        tabBarIcon: (({ color }) => <Ionicons name='home' size={20} color={color} />),
+                        tabBarLabel: 'Home'
+                    }}
+                />
+                <Tabs.Screen
+                    name="leaderboard"
                     options={{
                         headerShown: false,
                         tabBarIcon: (({ color }) => <Ionicons name='home' size={20} color={color} />),
