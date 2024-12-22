@@ -4,11 +4,11 @@
     "slug": "rakamin-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/dummy-logo.png",
+    "icon": "./assets/tuwaga_logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/dummy-logo.png",
+      "image": "./assets/tuwaga_logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
