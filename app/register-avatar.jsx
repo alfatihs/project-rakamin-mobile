@@ -77,7 +77,7 @@ export default function RegisterAvatarScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    
       <ImageBackground
         source={require("../assets/background-image.png")}
         style={styles.background}
@@ -85,8 +85,9 @@ export default function RegisterAvatarScreen() {
       >
         <View style={styles.overlay}>
           <View style={styles.wrapper}>
+            <View style={{ marginTop: 40 }}>
             <Text style={styles.title}>Pilih Avatar</Text>
-
+            </View>
             <View style={styles.listContainer}>
               <FlatList
                 data={avatars}
@@ -107,7 +108,7 @@ export default function RegisterAvatarScreen() {
           </View>
         </View>
       </ImageBackground>
-    </SafeAreaView>
+    
   );
 }
 
@@ -158,5 +159,7 @@ const styles = StyleSheet.create({
   selected: {
     borderColor: "blue",
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginBottom:  20
+  },
 });
