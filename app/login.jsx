@@ -8,12 +8,13 @@ import {
   Alert,
   Pressable,
   ImageBackground,
+  ActivityIndicator, // <-- Tambahkan
 } from "react-native";
 import { Link, router } from "expo-router";
 import { z } from "zod";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-import CheckBox from 'expo-checkbox'; // jika butuh checkbox
+import CheckBox from "expo-checkbox";
 import Button from "../components/ButtonAuth";
 
 const loginSchema = z.object({
@@ -21,19 +22,25 @@ const loginSchema = z.object({
   password: z
     .string()
     .nonempty("Password wajib diisi")
-    .min(6, "Password minimal 6 karakter"),
+    .min(8, "Password minimal 8 karakter"),
 });
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
-  const [rememberMe, setRememberMe] = useState(false); // contoh state untuk checkbox
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Tambahkan state loading
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     try {
       setErrors({ email: "", password: "" });
       loginSchema.parse({ email, password });
+
+      // Mulai loading
+      setIsLoading(true);
 
       const res = await axios.post(
         "https://project-rakamin-api.vercel.app/auth/login",
@@ -42,7 +49,7 @@ export default function Login() {
           password,
         }
       );
-      console.log(res.data.data.token)
+      console.log(res.data.data.token);
 
       // Simpan token
       await SecureStore.setItemAsync("authToken", res?.data?.data?.token);
@@ -64,7 +71,6 @@ export default function Login() {
         setErrors(fieldErrors);
       } else {
         if (axios.isAxiosError(err) && err.response) {
-          const statusCode = err.response.status;
           Alert.alert(err?.response?.data.messege || "Terjadi kesalahan");
         } else {
           Alert.alert(
@@ -73,25 +79,25 @@ export default function Login() {
           );
         }
       }
+    } finally {
+      // Selesai loading (berhasil/gagal)
+      setIsLoading(false);
     }
   };
 
   return (
     <ImageBackground
-      source={require("../assets/background-image.png")} // ganti dengan file pattern Anda
+      source={require("../assets/background-image.png")}
       style={styles.background}
-      resizeMode="cover" // atau 'contain', 'stretch' dsb.
+      resizeMode="cover"
     >
       <View style={styles.overlay}>
-        {/* Konten Login */}
         <View style={styles.container}>
-          {/* Logo */}
           <Image
             source={require("../assets/dummy-logo.png")}
             style={styles.logo}
           />
 
-          {/* Label & Input “Nama (email)” */}
           <Text style={styles.label}>Nama</Text>
           <TextInput
             style={styles.input}
@@ -108,13 +114,12 @@ export default function Login() {
             <Text style={styles.errorText}>{errors.email}</Text>
           ) : null}
 
-          {/* Label & Input “Kata Sandi” */}
           <Text style={styles.label}>Kata Sandi</Text>
           <TextInput
             style={styles.input}
             placeholder="Masukkan kata sandi"
             placeholderTextColor="#999"
-            secureTextEntry={true}
+            secureTextEntry
             value={password}
             onChangeText={(text) => {
               setPassword(text);
@@ -125,9 +130,8 @@ export default function Login() {
             <Text style={styles.errorText}>{errors.password}</Text>
           ) : null}
 
-          {/* Ingat Saya + Lupa Password */}
           <View style={styles.row}>
-          <View style={styles.checkBoxContainer}>
+            <View style={styles.checkBoxContainer}>
               <CheckBox
                 style={styles.checkbox}
                 value={rememberMe}
@@ -137,14 +141,17 @@ export default function Login() {
               <Text style={styles.checkBoxLabel}>Ingat Saya</Text>
             </View>
             <Pressable onPress={() => Alert.alert("Fitur lupa password belum ada")}>
-          <Text style={{ color: "#19918F" }}>Lupa Password</Text>
-        </Pressable>
+              <Text style={{ color: "#19918F" }}>Lupa Password</Text>
+            </Pressable>
           </View>
 
-          {/* Tombol “Masuk” */}
-          <Button text="Masuk" onPress={handleLogin} bgColor="#0C356A" />
+          {/* Jika isLoading, tampilkan spinner; jika tidak, tampilkan tombol */}
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#0C356A" />
+          ) : (
+            <Button text="Masuk" onPress={handleLogin} bgColor="#0C356A" />
+          )}
 
-          {/* Punya akun? Register */}
           <View style={{ flexDirection: "row", marginTop: 10 }}>
             <Text>Belum punya akun? </Text>
             <Link style={{ color: "#19918F" }} href="/register">
@@ -158,12 +165,10 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  // style background
   background: {
     flex: 1,
     justifyContent: "center",
   },
-  // overlay (opsional) bisa dipakai kalau mau kasih efek transparan gelap/terang
   overlay: {
     flex: 1,
     justifyContent: "center",
@@ -171,7 +176,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     alignItems: "center",
-    // jika ingin memaksa lebar tertentu atau margin sekeliling, bisa diatur di sini
   },
   logo: {
     width: 80,
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 80,
   },
-    checkBoxContainer: {
+  checkBoxContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
