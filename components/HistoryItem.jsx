@@ -1,20 +1,12 @@
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 export default function HistoryItem() {
     return (
-        <View style={{ padding: 20, borderRadius: 10, flexDirection: 'row' }}>
+        <View style={{ padding: 8, borderRadius: 20, flexDirection: 'row', columnGap: 20, borderWidth: 2, borderColor: '#efeefc' }}>
             {/* <Text>Ini History Page</Text> */}
-            <Image source={{ uri: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' }}></Image>
-            <View>
-                <Text>Ranked</Text>
-                <Text>Menang</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ borderRadius: 100, backgroundColor: 'red', width: 20, height: 20 }}></View>
-                    <Text>3 win</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ borderRadius: 100, backgroundColor: 'blue', width: 20, height: 20 }}></View>
-                    <Text>1 lose</Text>
-                </View>
+            <Image source={{ uri: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png', width: 64, height: 64, borderRadius: 20 }} ></Image>
+            <View style={{ rowGap: 12 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Kamu Menang</Text>
+                <Text style={{ fontSize: 12, color: '#505050' }}>dari User X</Text>
             </View>
         </View>
     )

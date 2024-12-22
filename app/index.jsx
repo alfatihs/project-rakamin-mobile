@@ -1,8 +1,11 @@
-import Home from "./(private)";
+import Home from "./(private)/index";
+import History from "./(private)/history";
 import { Text, View } from "react-native";
+import Leaderboard from "./(private)/leaderboard";
 export default function App() {
     return (
         <Home />
-        // <View><Text>Rakamin Mobile</Text></View>
+        // <History />
+        // <Leaderboard />
     );
 }
