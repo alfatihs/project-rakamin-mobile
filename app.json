@@ -4,11 +4,11 @@
     "slug": "rakamin-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/dummy-logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/dummy-logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -25,7 +25,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-secure-store"
     ]
   }
 }
