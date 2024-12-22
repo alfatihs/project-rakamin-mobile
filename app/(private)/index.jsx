@@ -1,11 +1,10 @@
-import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground } from "react-native";
 import ProfilePhoto from "../../components/ProfilePhoto";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import PlayButton from "../../components/PlayButton";
 import LogoutButton from "../../components/LogoutButton";
 import { Link, useNavigation, router } from 'expo-router';
-
-const backgroundImagePath = require('./../../assets/batik.png')
+import * as SecureStore from "expo-secure-store";
 
 const dataSample = [
     {
@@ -44,20 +43,24 @@ const dataSample = [
 const renderItem = ({ item }) => (
     <Image style={{ width: 100, height: 100, borderRadius: 8 }} source={{ uri: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' }}></Image>
 )
+const backgroundImagePath = require('./../../assets/background-image.png')
 
 export default function Home() {
+    const navigation = useNavigation();
     return (
-        <View style={{ padding: 20, flex: 1, justifyContent: 'space-between' }}>
-            <Image source={backgroundImagePath} style={{ width: 300, height: 200, position: 'absolute', bottom: 0, left: -100 }} resizeMode={'contain'}></Image>
+        <ImageBackground style={{ padding: 20, flex: 1, justifyContent: 'space-between' }} source={backgroundImagePath} resizeMode="cover">
             <View>
-                <LogoutButton></LogoutButton>
+                <LogoutButton onPress={() => {
+                    navigation.popTo('login');
+                    SecureStore.deleteItemAsync('authToken');
+                }}></LogoutButton>
                 <View style={{ alignItems: "center", rowGap: 13 }}>
                     <ProfilePhoto></ProfilePhoto>
                     <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, color: '#505050' }}>Hi Azmi!</Text>
                     <Text style={{ textAlign: 'center', color: '#505050' }}>Lihat peringkatmu <Text style={{ fontWeight: 'bold' }} onPress={() => router.navigate('leaderboard')} >di sini</Text></Text>
                 </View>
             </View>
-            <PlayButton />
+            <PlayButton text='Main' onPress={() => router.navigate('selectmode')} size='big' />
             <View style={{ widht: '100%', rowGap: 20, height: 200 }}>
                 <TouchableOpacity onPress={() => router.push('history')}>
                     <Text style={{ fontWeight: 'bold' }}>{`Riwayat Permainan >`}</Text>
@@ -71,6 +74,6 @@ export default function Home() {
                 >
                 </FlatList>
             </View>
-        </View >
+        </ ImageBackground>
     )
 }

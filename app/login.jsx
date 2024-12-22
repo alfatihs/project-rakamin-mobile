@@ -94,7 +94,7 @@ export default function Login() {
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Image
-            source={require("../assets/dummy-logo.png")}
+            source={require("../assets/tuwaga_logo.png")}
             style={styles.logo}
           />
 
@@ -178,9 +178,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 80,
-    height: 80,
-    marginBottom: 90,
+    width: 200,
+    height: 200,
+    marginBottom: 25,
     resizeMode: "contain",
   },
   label: {
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 80,
+    marginBottom: 40,
   },
   checkBoxContainer: {
     flexDirection: "row",

@@ -1,4 +1,4 @@
-import { Text, ScrollView, FlatList, View, Image } from "react-native";
+import { Text, ScrollView, FlatList, View, Image, ImageBackground } from "react-native";
 import HistoryItem from "../../components/HistoryItem";
 import BackButton from "../../components/BackButton";
 import { router } from "expo-router";
@@ -78,7 +78,11 @@ const dataSample = [
 
 export default function History({ data = dataSample }) {
     return (
-        <View style={{ paddingTop: 116, paddingBottom: 60, paddingHorizontal: 32, rowGap: 37 }}>
+        <ImageBackground
+            style={{ flex: 1, paddingTop: 90, paddingBottom: 60, paddingHorizontal: 32, rowGap: 37 }}
+            source={require('./../../assets/history-background.png')}
+            resizeMode="cover"
+        >
             <View style={{ position: 'absolute', top: 33, left: 17 }}>
                 <BackButton onPress={() => router.back()}></BackButton>
             </View>
@@ -89,6 +93,6 @@ export default function History({ data = dataSample }) {
                 renderItem={renderItem}
                 contentContainerStyle={{ gap: 25 }}
             />
-        </View>
+        </ImageBackground>
     )
 }
