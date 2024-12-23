@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,7 @@ import {
   Alert,
   Pressable,
   ImageBackground,
-  ActivityIndicator, // <-- Tambahkan
+  ActivityIndicator,
 } from "react-native";
 import { Link, router } from "expo-router";
 import { z } from "zod";
@@ -30,16 +30,31 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
-
-  // Tambahkan state loading
   const [isLoading, setIsLoading] = useState(false);
+
+  // Tambahkan state untuk loading saat memeriksa token
+  const [checkingToken, setCheckingToken] = useState(true);
+
+  // Periksa token saat pertama kali render
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await SecureStore.getItemAsync("authToken");
+      if (token) {
+        // Jika token ada, langsung redirect ke homepage
+        router.replace("/(private)");
+      } else {
+        // Jika tidak ada token, selesaikan loading
+        setCheckingToken(false);
+      }
+    };
+    checkToken();
+  }, []);
 
   const handleLogin = async () => {
     try {
       setErrors({ email: "", password: "" });
       loginSchema.parse({ email, password });
 
-      // Mulai loading
       setIsLoading(true);
 
       const res = await axios.post(
@@ -76,10 +91,18 @@ export default function Login() {
         }
       }
     } finally {
-      // Selesai loading (berhasil/gagal)
       setIsLoading(false);
     }
   };
+
+  // Jika sedang memeriksa token, tampilkan spinner (atau layar kosong)
+  if (checkingToken) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0C356A" />
+      </View>
+    );
+  }
 
   return (
     <ImageBackground
@@ -141,7 +164,6 @@ export default function Login() {
             </Pressable>
           </View>
 
-          {/* Jika isLoading, tampilkan spinner; jika tidak, tampilkan tombol */}
           {isLoading ? (
             <ActivityIndicator size="large" color="#FFC436" />
           ) : (
@@ -219,5 +241,11 @@ const styles = StyleSheet.create({
   },
   checkBoxLabel: {
     fontSize: 14,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFF8EB",
   },
 });
