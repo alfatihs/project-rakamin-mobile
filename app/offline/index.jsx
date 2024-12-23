@@ -8,6 +8,7 @@ export default function PrepareGameScreen() {
   const [countdown, setCountdown] = useState(3);
   const [hasNavigated, setHasNavigated] = useState(false); // Tambahkan state untuk mengontrol navigasi
 
+
   useEffect(() => {
     if (countdown <= 0 && !hasNavigated) {
       // Navigasi hanya jika countdown selesai dan belum navigasi

@@ -109,10 +109,8 @@ export default function RegisterAvatarScreen() {
 
           <View style={styles.buttonContainer}>
             {isLoading ? (
-              // Jika sedang loading, tampilkan ActivityIndicator
-              <ActivityIndicator size="large" color="#0C356A" />
+              <ActivityIndicator size="large" color="#FFC436" />
             ) : (
-              // Jika tidak loading, tampilkan tombol
               <Button
                 text="Daftar"
                 bgColor="#0C356A"

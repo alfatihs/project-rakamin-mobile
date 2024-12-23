@@ -50,12 +50,8 @@ export default function Login() {
         }
       );
       console.log(res.data.data.token);
-
-      // Simpan token
       await SecureStore.setItemAsync("authToken", res?.data?.data?.token);
-
-      // Pindah halaman
-      router.push("/(private)");
+      router.replace("/(private)");
     } catch (err) {
       console.log("Login error:", err);
       if (err instanceof z.ZodError) {
@@ -147,7 +143,7 @@ export default function Login() {
 
           {/* Jika isLoading, tampilkan spinner; jika tidak, tampilkan tombol */}
           {isLoading ? (
-            <ActivityIndicator size="large" color="#0C356A" />
+            <ActivityIndicator size="large" color="#FFC436" />
           ) : (
             <Button text="Masuk" onPress={handleLogin} bgColor="#0C356A" />
           )}
