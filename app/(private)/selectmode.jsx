@@ -15,7 +15,7 @@ export default function SelectMode() {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { }}>
                 <Image style={{ borderRadius: 8, marginBottom: -20 }} source={require('./../../assets/vs-player.png')}></Image>
-                <PlayButton text='vs Manusia' onPress={() => { }} size='medium'></PlayButton>
+                <PlayButton text='vs Manusia' onPress={() => { router.push('online') }} size='medium'></PlayButton>
             </TouchableOpacity>
 
         </ImageBackground >

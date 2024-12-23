@@ -1,23 +1,25 @@
 import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image, ImageBackground } from "react-native";
 import { useRouter, useRootNavigationState } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+
 
 export default function Index() {
     const router = useRouter();
-    const navigationState = useRootNavigationState();
-    // navigationState?.key akan berisi nilai jika root sudah siap
-
     useEffect(() => {
-        // Jika root layout belum siap, jangan navigasi
-        if (!navigationState?.key) return;
-
-        // Begitu root layout siap, baru panggil router.push
-        router.replace("/login");
-    }, [navigationState?.key]);
+        const getAuthToken = async () => {
+            const authToken = await SecureStore.getItemAsync('authToken');
+            console.log(authToken, 'hasil authtoken ');
+            if (authToken) {
+                router.replace('/(private)');
+            } else {
+                router.replace('/login');
+            }
+        }
+        getAuthToken();
+    }, [])
 
     return (
-        <View>
-            <Text>Loading...</Text>
-        </View>
+        <ImageBackground style={{ flex: 1 }} source={require('./../assets/background-image.png')} resizeMode='cover' />
     );
 }

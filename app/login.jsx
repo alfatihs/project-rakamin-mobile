@@ -64,11 +64,8 @@ export default function Login() {
           password,
         }
       );
-
-      // Simpan token ke SecureStore
+      console.log(res.data.data.token);
       await SecureStore.setItemAsync("authToken", res?.data?.data?.token);
-
-      // Pindah halaman
       router.replace("/(private)");
     } catch (err) {
       console.log("Login error:", err);
@@ -168,7 +165,7 @@ export default function Login() {
           </View>
 
           {isLoading ? (
-            <ActivityIndicator size="large" color="#0C356A" />
+            <ActivityIndicator size="large" color="#FFC436" />
           ) : (
             <Button text="Masuk" onPress={handleLogin} bgColor="#0C356A" />
           )}
