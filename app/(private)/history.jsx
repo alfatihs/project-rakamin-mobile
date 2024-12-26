@@ -5,6 +5,8 @@ import { ImageBackground, View, Text, FlatList } from 'react-native';
 import BackButton from '../../components/BackButton';
 import * as SecureStore from 'expo-secure-store';
 import HistoryItem from '../../components/HistoryItem';
+import { useFonts } from 'expo-font';
+
 
 const getAuthToken = async () => {
     try {
@@ -15,6 +17,7 @@ const getAuthToken = async () => {
 };
 
 const fetchHistory = async (userID, setHistoryItems) => {
+
     try {
         // Retrieve auth token
         const authToken = await getAuthToken();
@@ -85,7 +88,7 @@ export default function History() {
             <View style={{ position: 'absolute', top: 33, left: 17 }}>
                 <BackButton onPress={() => router.back()} />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 18, color: '#0c356a', fontWeight: 'bold' }}>Riwayat Permainan</Text>
+            <Text style={{ textAlign: 'center', fontSize: 18, color: '#0c356a', fontFamily: 'Poppins-Bold' }}>Riwayat Permainan</Text>
             <FlatList
                 data={historyItems}
                 keyExtractor={(item) => item.id.toString()}

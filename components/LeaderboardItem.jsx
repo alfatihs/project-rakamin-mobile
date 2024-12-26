@@ -24,7 +24,7 @@ export default function LeaderboardItem({ rank, name, point, avatar }) {
                     justifyContent: "center"
                 }}
             >
-                <Text style={{ color: "#858494", fontWeight: "bold", textAlign: "center" }}>
+                <Text style={{ color: "#858494", fontFamily: 'Poppins-Bold', textAlign: "center" }}>
                     {rank}
                 </Text>
             </View>
@@ -33,7 +33,7 @@ export default function LeaderboardItem({ rank, name, point, avatar }) {
                 style={{ width: 40, height: 40, borderRadius: 20 }}
             />
             <View>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>{name}</Text>
+                <Text style={{ fontSize: 16, fontFamily: 'Poppins-Bold' }}>{name}</Text>
                 <Text style={{ color: "grey" }}>{point}</Text>
             </View>
         </View>

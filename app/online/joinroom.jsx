@@ -81,7 +81,7 @@ export default function JoinRoom() {
 
         >
 
-            <Text style={{ fontWeight: 'bold' }}>Masukkan kode Arena di bawah ini!</Text>
+            <Text style={{ fontFamily: 'Poppins-Bold' }}>Masukkan kode Arena di bawah ini!</Text>
             <TextInput
                 value={roomID}
                 onChangeText={(text) => setRoomID(text)}

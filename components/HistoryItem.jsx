@@ -60,10 +60,10 @@ export default function HistoryItem({ result = 'draw', name = 'User X', avatar }
                 />
             </View>
             <View style={{ rowGap: 12 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'white' }}>
+                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 16, color: 'white' }}>
                     {result === 'win' ? `Kamu Menang` : result === 'draw' ? `Kamu Seri` : `Kamu Kalah`}
                 </Text>
-                <Text style={{ fontSize: 12, color: 'white' }}>dari {name}</Text>
+                <Text style={{ fontSize: 12, color: 'white', fontFamily: 'Poppins-Regular' }}>dari {name}</Text>
             </View>
         </LinearGradient>
     );

@@ -99,6 +99,7 @@ export default function Home() {
 
     const fetchHistory = async (userID, setHistoryItems) => {
         try {
+            console.log(userID, 'userID!')
             // Retrieve auth token
             const authToken = await SecureStore.getItemAsync('authToken');
             if (!authToken) {
@@ -112,15 +113,26 @@ export default function Home() {
                 }
             });
 
-            const formattedData = Object.values(response.data.data).map((item) => {
-                const isPlayer1 = item.player1_id === userID; // Determine if we are Player 1
+            if (response.status !== 200) {
+                console.error("Failed to fetch history data.");
+                return;
+            }
+            else {
+                console.log(response.data.data, 'response data!');
+            }
+
+
+            const formattedData = Object.values(response?.data.data).map((item) => {
+                const isPlayer1 = item?.player1_id === userID; // Determine if we are Player 1
+                console.log('player 1?', isPlayer1)
                 const result = isPlayer1
                     ? item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose'
                     : item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose';
-
                 const opponentAvatar = isPlayer1
                     ? item.player2_avatar || 'https://via.placeholder.com/64'
                     : item.player1_avatar || 'https://via.placeholder.com/64';
+
+                console.log(opponentAvatar, 'opponentAvatar', isPlayer1, 'player1?')
 
                 return {
                     id: item.id,
@@ -143,8 +155,13 @@ export default function Home() {
 
     useEffect(() => {
         getProfileData();
-        fetchHistory(profileData.id, setHistoryData);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (profileData.id) {
+            fetchHistory(profileData.id, setHistoryData);
+        }
+    }, [profileData.id]);
 
 
 
@@ -158,11 +175,11 @@ export default function Home() {
                 }}></LogoutButton>
                 <View style={{ alignItems: "center", rowGap: 13 }}>
                     <ProfilePhoto imgurl={profileData?.avatar}></ProfilePhoto>
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, color: '#505050' }}>{`Hi ${profileData?.name} !`}</Text>
-                    <Text style={{ textAlign: 'center', color: '#505050' }}>Lihat peringkatmu <Text style={{ fontWeight: 'bold' }} onPress={() => router.navigate('leaderboard')} >di sini</Text></Text>
+                    <Text style={{ textAlign: 'center', fontSize: 18, color: '#0c356a', fontFamily: 'Poppins-Bold' }}>{`Hi ${profileData?.name} !`}</Text>
+                    <Text style={{ textAlign: 'center', color: '#0c356a', fontFamily: 'Poppins-Regular' }}>Lihat peringkatmu <Text style={{ fontWeight: 'bold' }} onPress={() => router.navigate('leaderboard')} >di sini</Text></Text>
                 </View>
             </View>
-            <PlayButton text='Main' onPress={() => router.push('selectmode')} size='big' />
+            <PlayButton text='Main' onPress={() => router.push('selectmode')} fontSize={36} width={162} />
             <View style={{ widht: '100%', rowGap: 20, height: 200 }}>
                 <TouchableOpacity onPress={() => router.push({
                     pathname: 'history',
@@ -170,7 +187,7 @@ export default function Home() {
                         userID: profileData.id
                     }
                 })}>
-                    <Text style={{ fontWeight: 'bold' }}>{`Riwayat Permainan >`}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold' }}>{`Riwayat Permainan >`}</Text>
                 </TouchableOpacity>
                 <FlatList
                     data={historyData}
@@ -179,7 +196,8 @@ export default function Home() {
                     horizontal={true}
                     contentContainerStyle={{ gap: 10 }}
                     showsHorizontalScrollIndicator={false}
-                // style={{  }}
+                // style={{ backgroundColor: 'red', height: 20 }}
+
                 >
                 </FlatList>
             </View>

@@ -1,6 +1,13 @@
 import { Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+// import { Text } from 'react-native';
 
 export default function Layout() {
+
+    const [loaded, error] = useFonts({
+        'Poppins-Regular': require('./../assets/fonts/Poppins-Regular.ttf'),
+        'Poppins-Bold': require('./../assets/fonts/Poppins-Bold.ttf'),
+    });
     return (
         <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
