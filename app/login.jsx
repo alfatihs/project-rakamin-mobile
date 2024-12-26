@@ -66,6 +66,7 @@ export default function Login() {
       );
       console.log(res.data.data.token);
       await SecureStore.setItemAsync("authToken", res?.data?.data?.token);
+      // console.log('token set!', res.data.data.token);
       router.replace("/(private)");
     } catch (err) {
       console.log("Login error:", err);

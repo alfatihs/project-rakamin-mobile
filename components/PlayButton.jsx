@@ -14,17 +14,20 @@ export default function PlayButton({ text, onPress, size }) {
                 paddingVertical: 7,
                 paddingHorizontal: 8,
                 justifyContent: 'center',
-                alignSelf: 'center'
+                alignSelf: 'center',
             }}
             onPress={onPress}
         >
-            <View style={{
+            <View style={[{
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#A1CFF5',
                 paddingHorizontal: 10,
                 paddingVertical: 5
-            }}>
+            },
+                , text === 'Buat Arena' || text === 'Gabung Arena' ? {
+                    width: 250
+                } : {}]}>
                 <Text style={{ fontWeight: 'bold', fontSize: textSize, color: 'white', borderColor: 'black' }}>{text}</Text>
             </View>
         </TouchableOpacity>
