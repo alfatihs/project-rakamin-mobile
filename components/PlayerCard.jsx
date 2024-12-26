@@ -25,9 +25,9 @@ export default function PlayerCard({ name = '', avatar = '' }) {
                 borderRadius: 10,
                 color: '#0c356a'
             },
-            name !== '' ? { backgroundColor: '#FFC436' } : { backgroundColor: '#FFF0CE' },
+            name !== null ? { backgroundColor: '#FFC436' } : { backgroundColor: '#FFF0CE' },
             ]}>
-                {name !== '' ? name : 'Menunggu user...'}
+                {name !== null ? name : 'Menunggu user...'}
             </Text>
         </View>
     )

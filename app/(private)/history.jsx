@@ -14,7 +14,7 @@ const getAuthToken = async () => {
     }
 };
 
-const fetchHistory = async (userId, setHistoryItems) => {
+const fetchHistory = async (userID, setHistoryItems) => {
     try {
         // Retrieve auth token
         const authToken = await getAuthToken();
@@ -29,13 +29,14 @@ const fetchHistory = async (userId, setHistoryItems) => {
                 Authorization: `Bearer ${authToken}`
             }
         });
+        // console.log(response.data.data, 'response data!')
 
         // Map the response data
         const formattedData = Object.values(response.data.data).map((item) => {
-            const isPlayer1 = item.player1_id === userId; // Determine if we are Player 1
+            const isPlayer1 = item.player1_id === userID; // Determine if we are Player 1
             const result = isPlayer1
-                ? item.win === parseInt(userId) ? 'win' : item.draw ? 'draw' : 'lose'
-                : item.win === parseInt(userId) ? 'win' : item.draw ? 'draw' : 'lose';
+                ? item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose'
+                : item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose';
 
             // Extract opponent's name and avatar
             const opponentName = isPlayer1 ? item.player2_name || 'Unknown Player' : item.player1_name || 'Unknown Player';
@@ -68,11 +69,12 @@ const renderItem = ({ item }) => (
 
 export default function History() {
 
-    const { userId } = useLocalSearchParams();
+    const { userID } = useLocalSearchParams();
+    // console.log(userID, 'userId!')
     const [historyItems, setHistoryItems] = useState([]);
     useEffect(() => {
-        fetchHistory(userId, setHistoryItems);
-    }, [userId]);
+        fetchHistory(userID, setHistoryItems);
+    }, [userID]);
 
     return (
         <ImageBackground
