@@ -3,10 +3,11 @@ import ProfilePhoto from "../../components/ProfilePhoto";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import PlayButton from "../../components/PlayButton";
 import LogoutButton from "../../components/LogoutButton";
-import { Link, useNavigation, router } from 'expo-router';
+import { useNavigation, router } from 'expo-router';
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { useEffect, useState } from "react";
+
 
 const dataSample = [
     {
@@ -97,7 +98,7 @@ export default function Home() {
                     <Text style={{ textAlign: 'center', color: '#505050' }}>Lihat peringkatmu <Text style={{ fontWeight: 'bold' }} onPress={() => router.navigate('leaderboard')} >di sini</Text></Text>
                 </View>
             </View>
-            <PlayButton text='Main' onPress={() => router.navigate('selectmode')} size='big' />
+            <PlayButton text='Main' onPress={() => router.push('selectmode')} size='big' />
             <View style={{ widht: '100%', rowGap: 20, height: 200 }}>
                 <TouchableOpacity onPress={() => router.push('history')}>
                     <Text style={{ fontWeight: 'bold' }}>{`Riwayat Permainan >`}</Text>
