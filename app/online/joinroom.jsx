@@ -49,17 +49,18 @@ export default function JoinRoom() {
 
             if (response.data.data.gameStatus === 'playing') {
                 console.log('room is active, getting room data..')
+                await SecureStore.setItemAsync('roomID', response.data.data.roomId.toString());
                 router.replace({
                     pathname: '/online/ready',
-                   params: {
+                    params: {
                         roomID: roomID,
                         player1_name: response.data.data.p1.name,
-                        player1_image : response.data.data.p1.avatar,
+                        player1_image: response.data.data.p1.avatar,
                         player2_name: response.data.data.p2.name,
-                        player2_image : response.data.data.p2.avatar
-                   }
+                        player2_image: response.data.data.p2.avatar
+                    }
                 })
-                
+
             }
             else {
                 alert('Gagal bergabung ke Arena');
