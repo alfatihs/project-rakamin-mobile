@@ -100,7 +100,12 @@ export default function Home() {
             </View>
             <PlayButton text='Main' onPress={() => router.push('selectmode')} size='big' />
             <View style={{ widht: '100%', rowGap: 20, height: 200 }}>
-                <TouchableOpacity onPress={() => router.push('history')}>
+                <TouchableOpacity onPress={() => router.push({
+                    pathname: 'history',
+                    params: {
+                        userID : profileData.id
+                    }
+                })}>
                     <Text style={{ fontWeight: 'bold' }}>{`Riwayat Permainan >`}</Text>
                 </TouchableOpacity>
                 <FlatList
