@@ -181,9 +181,9 @@ export default function RoomMaster() {
     return (
         <ImageBackground source={backgroundImagePath} style={{ flex: 1, paddingHorizontal: 35, paddingVertical: 63 }}>
             <View>
-                <Text style={{ marginBottom: 6 }}>Masukkan kode Arena di bawah ini!</Text>
+                <Text style={{ marginBottom: 6, fontFamily: 'Poppins-Regular' }}>Bagikan kode Arena ke teman mu!</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 82 }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{`ID room: ${roomID}`}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 20 }}>{`ID room: ${roomID}`}</Text>
                     <TouchableOpacity onPress={copyToClipboard} style={{
                         backgroundColor: '#FFC436',
                         borderRadius: 100,
@@ -194,7 +194,7 @@ export default function RoomMaster() {
                         <Ionicons name='copy-outline' color={'#0c356a'} size={20}></Ionicons>
                     </TouchableOpacity>
                 </View>
-                <Text style={{ textAlign: 'center', fontSize: 24, color: '#0c356a', marginBottom: 104, fontWeight: 'bold' }}>Minta teman mu untuk segera masuk</Text>
+                <Text style={{ textAlign: 'center', fontSize: 24, color: '#0c356a', marginBottom: 104, fontFamily: 'Poppins-Bold' }}>Minta teman mu untuk segera masuk</Text>
                 <View style={{ gap: 34 }}>
                     <PlayerCard name={player1_name} avatar={player1_image}></PlayerCard>
                     <PlayerCard name={player2_name} avatar={player2_image}></PlayerCard>

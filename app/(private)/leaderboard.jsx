@@ -139,7 +139,7 @@ export default function Leaderboard() {
                         <Text
                             style={{
                                 color: "black",
-                                fontWeight: "bold",
+                                fontFamily: 'Poppins-Bold',
                                 fontSize: 16
                             }}
                         >
@@ -152,7 +152,7 @@ export default function Leaderboard() {
                                 borderRadius: 12,
                                 backgroundColor: "#ffc436",
                                 color: "white",
-                                fontWeight: "bold"
+                                fontFamily: 'Poppins-Bold'
                             }}
                         >
                             {leaderboardItems[1]?.point}
@@ -165,7 +165,7 @@ export default function Leaderboard() {
                         <Text
                             style={{
                                 color: "black",
-                                fontWeight: "bold",
+                                fontFamily: 'Poppins-Bold',
                                 fontSize: 16
                             }}
                         >
@@ -178,7 +178,7 @@ export default function Leaderboard() {
                                 borderRadius: 12,
                                 backgroundColor: "#ffc436",
                                 color: "white",
-                                fontWeight: "bold"
+                                fontFamily: 'Poppins-Bold'
                             }}
                         >
                             {leaderboardItems[0]?.point}
@@ -189,7 +189,7 @@ export default function Leaderboard() {
                         <Text
                             style={{
                                 color: "black",
-                                fontWeight: "bold",
+                                fontFamily: 'Poppins-Bold',
                                 fontSize: 16
                             }}
                         >
@@ -202,7 +202,7 @@ export default function Leaderboard() {
                                 borderRadius: 12,
                                 backgroundColor: "#ffc436",
                                 color: "white",
-                                fontWeight: "bold"
+                                fontFamily: 'Poppins-Bold'
                             }}
                         >
                             {leaderboardItems[2]?.point}

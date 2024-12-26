@@ -71,11 +71,11 @@ export default function SelectMode() {
             <View style={{ paddingHorizontal: 35, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => router.push('offline')} style={{ marginBottom: 22 }}  >
                     <Image style={{ borderRadius: 8, marginBottom: -20 }} source={require('./../../assets/vs-computer.png')}></Image>
-                    <PlayButton text='vs Komputer' onPress={() => router.push('offline')} size='medium'></PlayButton>
+                    <PlayButton text='vs Komputer' onPress={() => router.push('offline')} fontSize={26} width={226}></PlayButton>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { setModalVisible(true) }}>
                     <Image style={{ borderRadius: 8, marginBottom: -20 }} source={require('./../../assets/vs-player.png')}></Image>
-                    <PlayButton text='vs Manusia' onPress={() => { setModalVisible(true) }} size='medium'></PlayButton>
+                    <PlayButton text='vs Manusia' onPress={() => { setModalVisible(true) }} fontSize={26} width={226}></PlayButton>
                 </TouchableOpacity>
             </View>
 

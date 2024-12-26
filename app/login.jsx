@@ -172,7 +172,7 @@ export default function Login() {
           )}
 
           <View style={{ flexDirection: "row", marginTop: 10 }}>
-            <Text>Belum punya akun? </Text>
+            <Text style={{ fontFamily: 'Poppins-Regular' }}>Belum punya akun? </Text>
             <Link style={{ color: "#19918F" }} href="/register">
               Daftar
             </Link>

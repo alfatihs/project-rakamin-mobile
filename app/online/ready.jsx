@@ -29,12 +29,12 @@ export default function Ready() {
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFBF0" }}>
             {showCountdown ? (
-                <Text style={{ fontSize: 64, fontWeight: "bold", color: "#0c356a" }}>
+                <Text style={{ fontSize: 64, fontFamily: 'Poppins-Bold', color: "#0c356a" }}>
                     {countdown > 0 ? countdown : ""}
                 </Text>
             ) : (
                 <View>
-                    <Text style={{ fontWeight: 'bold', fontSize: 24, marginBottom: 136, textAlign: "center", color: '#0c356a' }}>Semua telah siap!</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 24, marginBottom: 136, textAlign: "center", color: '#0c356a' }}>Semua telah siap!</Text>
                     <View style={{ gap: 34, paddingHorizontal: 35 }}>
                         <PlayerCard name={player1_name} avatar={player1_image}></PlayerCard>
                         <PlayerCard name={player2_name} avatar={player2_image}></PlayerCard>

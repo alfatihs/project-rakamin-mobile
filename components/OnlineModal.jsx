@@ -29,8 +29,8 @@ export default function OnlineModal() {
         }}>
             <Image source={onlineModalImage} style={{ alignSelf: 'center', width: '100%' }} resizeMode='cover'></Image>
             <View style={{ alignItems: 'center', gap: 10, marginTop: -40 }}>
-                <PlayButton text='Gabung Arena' size='big' onPress={handleGabungArena}></PlayButton>
-                <PlayButton text='Buat Arena' size='big' onPress={handleBuatArena}></PlayButton>
+                <PlayButton text='Gabung Arena' onPress={handleGabungArena} fontSize={24} width={220} ></PlayButton>
+                <PlayButton text='Buat Arena' onPress={handleBuatArena} fontSize={24} width={220} ></PlayButton>
             </View>
         </View >
     )

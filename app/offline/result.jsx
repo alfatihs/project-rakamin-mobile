@@ -22,9 +22,9 @@ export default function ResultScreen() {
   let { userChoice, computerChoice, userScore, computerScore } =
     useLocalSearchParams();
 
-    if (userChoice === "none"){
-        userChoice = null
-    }
+  if (userChoice === "none") {
+    userChoice = null
+  }
   const [countdown, setCountdown] = useState(5);
   const [scores, setScores] = useState({
     user: parseInt(userScore) || 0,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   finishText: {
     color: "#FFF0CE",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: 'Poppins-Bold'
   },
   handsContainer: {
     flexDirection: "row",
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   },
   scoreText: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: 'Poppins-Bold',
     color: "#000",
   },
   countdownText: {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     color: "#FFF0CE",
     fontSize: 16,
     textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: 'Poppins-Bold',
     marginBottom: 40
   },
 });

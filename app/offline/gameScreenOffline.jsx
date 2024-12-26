@@ -146,5 +146,6 @@ const styles = StyleSheet.create({
   countdownText: {
     fontSize: 18,
     fontWeight: "600",
+    fontFamily: 'Poppins-Regular'
   },
 });

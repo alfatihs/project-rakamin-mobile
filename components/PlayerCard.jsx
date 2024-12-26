@@ -21,13 +21,13 @@ export default function PlayerCard({ name = '', avatar = '' }) {
                 width: '100%',
                 marginLeft: 10,
                 paddingLeft: 90,
-                fontWeight: 'bold',
+                fontFamily: 'Poppins-Bold',
                 borderRadius: 10,
                 color: '#0c356a'
             },
-            name !== '' ? { backgroundColor: '#FFC436' } : { backgroundColor: '#FFF0CE' },
+            name !== null ? { backgroundColor: '#FFC436' } : { backgroundColor: '#FFF0CE' },
             ]}>
-                {name !== '' ? name : 'Menunggu user...'}
+                {name !== null ? name : 'Menunggu user...'}
             </Text>
         </View>
     )
