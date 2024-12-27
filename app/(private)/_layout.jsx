@@ -21,6 +21,7 @@ export default function TabLayout() {
                 <Stack.Screen name='selectmode' options={{
                     headerShown: false
                 }} />
+            
             </Stack>
         </SafeAreaView>
     );

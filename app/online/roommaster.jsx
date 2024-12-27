@@ -6,6 +6,8 @@ import PlayerCard from "../../components/PlayerCard";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { router } from "expo-router";
+import BackButton from "../../components/BackButton";
+
 
 
 const backgroundImagePath = require('./../../assets/background-roommaster.png')
@@ -13,13 +15,16 @@ const backgroundImagePath = require('./../../assets/background-roommaster.png')
 
 const CREATE_ROOM_API_URL = "https://project-rakamin-api.vercel.app/rooms";
 
+
 export default function RoomMaster() {
+
     const [roomID, setRoomID] = useState(0);
     const [player1_name, setPlayer1_name] = useState(null);
     const [player2_name, setPlayer2_name] = useState(null);
     const [player1_image, setPlayer1_image] = useState(null);
     const [player2_image, setPlayer2_image] = useState(null);
     const [isFetching, setIsFetching] = useState(false);
+    const [fetchingRoomData, setFetchingRoomData] = useState(false);
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -39,7 +44,10 @@ export default function RoomMaster() {
 
     useEffect(() => {
         console.log('get room id!')
+
         const getRoomID = async () => {
+            setFetchingRoomData(true);
+            console.log('fetching room data..!');
             try {
 
                 const authToken = await SecureStore.getItemAsync('authToken');
@@ -47,6 +55,7 @@ export default function RoomMaster() {
                     Alert.alert('Authentication Required', 'Anda harus login terlebih dahulu!', [
                         { text: 'OK', onPress: () => router.replace('/login') },
                     ]);
+                    setFetchingRoomData(false);
                     return;
                 }
 
@@ -67,9 +76,13 @@ export default function RoomMaster() {
                 console.log(response.data.data.id, 'response data')
                 await SecureStore.setItemAsync('roomID', response.data.data.id.toString());
                 await SecureStore.setItemAsync('position', 'player1');
+
             } catch (error) {
                 console.error(error);
                 Alert.alert('Error', 'Gagal membuat room. Silakan coba lagi.');
+            } finally {
+                setFetchingRoomData(false);
+                console.log('done fetching room data!');
             }
         };
 
@@ -180,21 +193,34 @@ export default function RoomMaster() {
 
     return (
         <ImageBackground source={backgroundImagePath} style={{ flex: 1, paddingHorizontal: 35, paddingVertical: 63 }}>
+            <View style={{ position: 'absolute', left: 20, top: 20, backgroundColor: 'white', borderRadius: 100 }}>
+                <BackButton onPress={() => router.back()} />
+            </View>
             <View>
-                <Text style={{ marginBottom: 6, fontFamily: 'Poppins-Regular' }}>Bagikan kode Arena ke teman mu!</Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 82 }}>
-                    <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 20 }}>{`ID room: ${roomID}`}</Text>
-                    <TouchableOpacity onPress={copyToClipboard} style={{
-                        backgroundColor: '#FFC436',
-                        borderRadius: 100,
-                        padding: 4,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <Ionicons name='copy-outline' color={'#0c356a'} size={20}></Ionicons>
-                    </TouchableOpacity>
-                </View>
-                <Text style={{ textAlign: 'center', fontSize: 24, color: '#0c356a', marginBottom: 104, fontFamily: 'Poppins-Bold' }}>Minta teman mu untuk segera masuk</Text>
+                {fetchingRoomData ? (<>
+                    <View style={{ width: 200, height: 17, backgroundColor: "#D0D0D0", borderRadius: 25 }}></View>
+                    <View style={{ width: 150, height: 24, backgroundColor: "#D0D0D0", borderRadius: 25, marginBottom: 82 }}></View>
+                    <View style={{ width: 300, height: 30, backgroundColor: "#D0D0D0", borderRadius: 25, alignSelf: 'center' }}></View>
+                    <View style={{ width: 200, height: 30, backgroundColor: "#D0D0D0", borderRadius: 25, alignSelf: 'center', marginBottom: 100 }}></View>
+                </>)
+                    :
+                    (<>
+                        <Text style={{ marginBottom: 6, fontFamily: 'Poppins-Regular' }}>Bagikan kode Arena ke teman mu!</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 82 }}>
+                            <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 20 }}>{`ID room: ${roomID}`}</Text>
+                            <TouchableOpacity onPress={copyToClipboard} style={{
+                                backgroundColor: '#FFC436',
+                                borderRadius: 100,
+                                padding: 4,
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <Ionicons name='copy-outline' color={'#0c356a'} size={20}></Ionicons>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={{ textAlign: 'center', fontSize: 24, color: '#0c356a', marginBottom: 104, fontFamily: 'Poppins-Bold' }}>Minta teman mu untuk segera masuk</Text>
+                    </>)
+                }
                 <View style={{ gap: 34 }}>
                     <PlayerCard name={player1_name} avatar={player1_image}></PlayerCard>
                     <PlayerCard name={player2_name} avatar={player2_image}></PlayerCard>

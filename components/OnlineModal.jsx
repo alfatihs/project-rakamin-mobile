@@ -7,11 +7,11 @@ const onlineModalImage = require('./../assets/room-modals.png');
 const handleBuatArena = () => {
     const roomID = '123456';
     console.log('Join room with ID:', roomID);
-    router.replace('online/roommaster', { roomID: roomID });
+    router.push('online/roommaster', { roomID: roomID });
 }
 
 const handleGabungArena = () => {
-    router.replace('online/joinroom');
+    router.push('online/joinroom');
 }
 
 export default function OnlineModal() {
