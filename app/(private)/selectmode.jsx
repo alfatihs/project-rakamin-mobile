@@ -5,9 +5,11 @@ import OnlineModal from "../../components/OnlineModal";
 import { useState, useEffect } from "react";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { set } from "zod";
+import { useMusic } from "../providers/MusicProvider";
 
 
 export default function SelectMode() {
+    const { playClickSound } = useMusic();
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -25,7 +27,7 @@ export default function SelectMode() {
 
     const ModalOverlay = () => {
         return (
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <TouchableWithoutFeedback onPress={() => { playClickSound(); setModalVisible(false) }}>
 
                 <View style={{
                     height: '100%',
@@ -48,7 +50,7 @@ export default function SelectMode() {
                                     style={{ marginBottom: -28, zIndex: 4, alignSelf: 'flex-end', marginTop: 5 }}
                                     size={20}
                                     color={'rgba(80, 80, 80, 0.5)'}
-                                    onPress={() => setModalVisible(false)}
+                                    onPress={() => { playClickSound(); setModalVisible(false) }}
                                 ></Ionicons>
                             </View>
 
@@ -70,13 +72,13 @@ export default function SelectMode() {
             {modalVisible && <ModalOverlay />}
             <View style={{ paddingHorizontal: 35, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-                <TouchableOpacity onPress={() => router.push('offline')} style={{ marginBottom: 22 }}  >
+                <TouchableOpacity onPress={() => { playClickSound(); router.push('offline') }} style={{ marginBottom: 22 }}  >
                     <Image style={{ borderRadius: 8, marginBottom: -20 }} source={require('./../../assets/vs-computer.png')}></Image>
-                    <PlayButton text='vs Komputer' onPress={() => router.push('offline')} fontSize={26} width={226}></PlayButton>
+                    <PlayButton text='vs Komputer' onPress={() => { playClickSound(); router.push('offline') }} fontSize={26} width={226}></PlayButton>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { setModalVisible(true) }}>
                     <Image style={{ borderRadius: 8, marginBottom: -20 }} source={require('./../../assets/vs-player.png')}></Image>
-                    <PlayButton text='vs Manusia' onPress={() => { setModalVisible(true) }} fontSize={26} width={226}></PlayButton>
+                    <PlayButton text='vs Manusia' onPress={() => { playClickSound(); setModalVisible(true) }} fontSize={26} width={226}></PlayButton>
                 </TouchableOpacity>
                 {/* <TouchableOpacity style={{ marginTop: 20, flexDirection: 'row', alignItems: "center", alignSelf: 'flex-end', backgroundColor: '#c6c6c6', paddingHorizontal: 10, borderRadius: 20, paddingVertical: 3 }} onPress={() => router.push('/tutorial')}>
                     <Ionicons name='information-circle-outline' size={16} color={'white'}></Ionicons>

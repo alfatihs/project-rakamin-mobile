@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import HistoryItem from '../../components/HistoryItem';
 import HistryPlaceholder from '../../components/HistoryPlaceholder';
 import { set } from 'zod';
+import { useMusic } from '../providers/MusicProvider';
 
 
 const getAuthToken = async () => {
@@ -22,6 +23,7 @@ const renderItem = ({ item }) => (
 );
 
 export default function History() {
+    const { playClickSound } = useMusic();
     const [isFetching, setIsFetching] = useState(false);
 
     const fetchHistory = async (userID, setHistoryItems) => {
@@ -92,7 +94,7 @@ export default function History() {
             resizeMode="cover"
         >
             <View style={{ position: 'absolute', top: 33, left: 17 }}>
-                <BackButton onPress={() => router.back()} />
+                <BackButton onPress={() => { playClickSound(); router.back() }} />
             </View>
             <Text style={{ textAlign: 'center', fontSize: 18, color: '#0c356a', fontFamily: 'Poppins-Bold' }}>Riwayat Permainan</Text>
             {isFetching ? <HistryPlaceholder /> :

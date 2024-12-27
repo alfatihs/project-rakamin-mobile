@@ -14,6 +14,7 @@ import {
 import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 import Button from "../components/ButtonAuth";
+import { useMusic } from "./providers/MusicProvider";
 
 const API_URL = "https://project-rakamin-api.vercel.app/auth/register";
 const AVATAR_BASE_URL = "https://avatar.iran.liara.run/public";
@@ -31,6 +32,7 @@ function generateUniqueAvatars(count) {
 }
 
 export default function RegisterAvatarScreen() {
+  const { playClickSound } = useMusic();
   const router = useRouter();
   // Dapatkan name, email, password dari screen sebelumnya
   const { name, email, password } = useLocalSearchParams();
@@ -78,7 +80,7 @@ export default function RegisterAvatarScreen() {
           styles.avatarContainer,
           isSelected && styles.selected,
         ]}
-        onPress={() => setSelectedAvatar(item.uri)}
+        onPress={() => { playClickSound(); setSelectedAvatar(item.uri) }}
       >
         <Image source={{ uri: item.uri }} style={styles.avatar} />
       </TouchableOpacity>
@@ -114,7 +116,7 @@ export default function RegisterAvatarScreen() {
               <Button
                 text="Daftar"
                 bgColor="#0C356A"
-                onPress={handleRegister}
+                onPress={() => { playClickSound(); handleRegister() }}
               />
             )}
           </View>

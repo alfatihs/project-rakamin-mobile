@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useMusic } from "../providers/MusicProvider";
 
 // Gesture images for user (blue shirt)
 const userGestures = {
@@ -18,6 +19,7 @@ const computerGestures = {
 };
 
 export default function ResultScreen() {
+  const { playClickSound } = useMusic();
   const router = useRouter();
   let { userChoice, computerChoice, userScore, computerScore } =
     useLocalSearchParams();
@@ -79,7 +81,7 @@ export default function ResultScreen() {
       {/* Header */}
       <TouchableOpacity
         style={styles.finishButton}
-        onPress={() => router.replace("/(private)")}
+        onPress={() => { playClickSound(); router.replace("/(private)") }}
       >
         <Text style={styles.finishText}>Selesaikan</Text>
         <MaterialIcons name="logout" size={20} color="#FFF0CE" />

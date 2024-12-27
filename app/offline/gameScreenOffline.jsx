@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useLocalSearchParams, useRouter, useSearchParams } from "expo-router";
+import { useMusic } from "../providers/MusicProvider";
 
 const gestures = [
   { name: "rock", image: require("../../assets/rock.png") },
@@ -9,6 +10,7 @@ const gestures = [
 ];
 
 export default function GameScreenOffline() {
+  const { playClickSound } = useMusic();
   const router = useRouter();
   const { userScore: initialUserScore = 0, computerScore: initialComputerScore = 0 } =
     useLocalSearchParams();
@@ -94,7 +96,7 @@ export default function GameScreenOffline() {
           <TouchableOpacity
             key={gesture.name}
             style={styles.handBox}
-            onPress={() => handleUserPick(gesture.name)}
+            onPress={() => { playClickSound(); handleUserPick(gesture.name) }}
           >
             <Image source={gesture.image} style={styles.handImage} />
           </TouchableOpacity>

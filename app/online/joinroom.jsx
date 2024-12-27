@@ -5,6 +5,7 @@ import axios from "axios";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import BackButton from "../../components/BackButton";
+import { useMusic } from "../providers/MusicProvider";
 
 const backgroundImagePath = require('./../../assets/background-joinroom.png')
 
@@ -13,6 +14,7 @@ const ROOM_INFO_API_URL = "https://project-rakamin-api.vercel.app/rooms/info";
 
 
 export default function JoinRoom() {
+    const { playClickSound } = useMusic();
     const [player1_id, setPlayer1_id] = useState('');
     const [player2_id, setPlayer2_id] = useState('');
     const [roomID, setRoomID] = useState('');
@@ -22,7 +24,7 @@ export default function JoinRoom() {
         const authToken = await SecureStore.getItemAsync('authToken');
         if (!authToken) {
             Alert.alert('Authentication Required', 'Anda harus login terlebih dahulu!', [
-                { text: 'OK', onPress: () => router.replace('/login') },
+                { text: 'OK', onPress: () => { playClickSound(); router.replace('/login') } },
             ]);
             return;
         }
@@ -83,7 +85,7 @@ export default function JoinRoom() {
 
         >
             <View style={{ position: 'absolute', left: 20, top: 20, backgroundColor: 'white', borderRadius: 100 }}>
-                <BackButton onPress={() => router.back()} />
+                <BackButton onPress={() => { playClickSound(); router.back() }} />
             </View>
 
             <Text style={{ fontFamily: 'Poppins-Bold' }}>Masukkan kode Arena di bawah ini!</Text>
@@ -103,7 +105,7 @@ export default function JoinRoom() {
                 }}
             ></TextInput>
 
-            <Button text='Masuk Arena' onPress={handleJoinRoom} bgColor="#0C356A"></Button>
+            <Button text='Masuk Arena' onPress={() => { playClickSound(); handleJoinRoom() }} bgColor="#0C356A"></Button>
 
         </ImageBackground>
     )
