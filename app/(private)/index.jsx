@@ -76,41 +76,52 @@ export default function Home() {
     const [historyData, setHistoryData] = useState([])
 
     const getProfileData = async () => {
-        setIsFetching(true);
-        const authToken = await SecureStore.getItemAsync('authToken');
-        if (!authToken) {
-            alert('Anda harus login terlebih dahulu');
-            setIsFetching(false);
-            router.replace('/login');
-        }
-        else {
-            const res = await axios.get(PROFILE_API_URL,
-                {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                }
-            );
-            // console.log(res.data, res.status, 'res')
+        try {
+            setIsFetching(true);
+
+            // Retrieve the authentication token
+            const authToken = await SecureStore.getItemAsync('authToken');
+            if (!authToken) {
+                alert('Anda harus login terlebih dahulu');
+                router.replace('/login');
+                return; // Exit early if there's no token
+            }
+
+            // Fetch profile data
+            const res = await axios.get(PROFILE_API_URL, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+
+            // Check if the response status is not OK (200)
             if (res.status !== 200) {
                 alert('Terjadi kesalahan. Silakan login kembali');
-                setIsFetching(false);
                 router.replace('/login');
+                return; // Exit early on failure
             }
-            else {
-                const profile = res.data.data;
-                // console.log(res.data.data, 'profile data')
-                console.log(res.data.data, 'res data data')
-                setProfileData(profile);
-                setUserId(res.data.data.id);
 
-                // Simpan userId di SecureStore
-                await SecureStore.setItemAsync("userId", res?.data?.data?.id.toString());
-                console.log(`UserId (${res.data?.data?.id}) saved to SecureStore`);
+            // Extract and process profile data
+            const profile = res.data?.data;
+            if (!profile) {
+                throw new Error('Invalid profile data received');
             }
+
+            console.log(profile, 'res data data');
+            setProfileData(profile);
+
+            // Save userId to SecureStore
+            await SecureStore.setItemAsync('userId', profile?.id.toString());
+            console.log(`UserId (${profile?.id}) saved to SecureStore`);
+        } catch (error) {
+            console.error('Error fetching profile data:', error);
+            alert('Terjadi kesalahan. Silakan coba lagi.');
+            router.replace('/login'); // Redirect to login on error
+        } finally {
+            setIsFetching(false); // Ensure the fetching state is updated
         }
+    };
 
-    }
 
 
 
@@ -139,7 +150,6 @@ export default function Home() {
                 return;
             }
             else {
-                // console.log(response.data.data, 'response data!');
             }
 
 
@@ -161,9 +171,7 @@ export default function Home() {
                     avatar: opponentAvatar,
                 };
             });
-            // console.log(formattedData, 'formattedData!!!')
 
-            // Set history items
             setHistoryItems(formattedData);
             setIsFetching(false);
         } catch (err) {
