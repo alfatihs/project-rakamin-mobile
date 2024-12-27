@@ -22,7 +22,7 @@ export default function Ready() {
             const countdownTimer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(countdownTimer);
         } else if (showCountdown && countdown === 0) {
-            router.replace("/online/OnlineGameScreen");
+            router.replace("/online/gameScreenOnline");
         }
     }, [countdown, showCountdown, router]);
 

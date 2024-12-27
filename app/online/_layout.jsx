@@ -7,6 +7,9 @@ export default function OnlineLayout() {
       <Stack.Screen name='roommaster' options={{ headerShown: false }} />
       <Stack.Screen name='joinroom' options={{ headerShown: false }} />
       <Stack.Screen name='ready' options={{ headerShown: false }} />
+      <Stack.Screen name="gameLoadingScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="gameScreenOnline" options={{ headerShown: false }} />
+      <Stack.Screen name="resultOnline" options={{ headerShown: false }} />
     </Stack>
   );
 }
