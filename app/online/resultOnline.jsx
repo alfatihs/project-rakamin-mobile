@@ -47,6 +47,7 @@ export default function ResultScreenOnline() {
         const token = await SecureStore.getItemAsync("authToken");
         const roomID = await SecureStore.getItemAsync("roomID");
         const userId = await SecureStore.getItemAsync("userId"); // Simpan user ID lokal di SecureStore
+        console.log('token', token, 'roomID', roomID, 'userId', userId)
         if (token && roomID && userId) {
           setBearerToken(token);
           setRoomId(roomID);

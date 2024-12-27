@@ -104,8 +104,8 @@ export default function JoinRoom() {
                     fontSize: 14, marginBottom: 200
                 }}
             ></TextInput>
-
-            <Button text='Masuk Arena' onPress={() => { playClickSound(); handleJoinRoom() }} bgColor="#0C356A"></Button>
+            
+            <Button  text='Masuk Arena' onPress={() => { playClickSound(); handleJoinRoom() }} bgColor="#0C356A"></Button>
 
         </ImageBackground>
     )

@@ -97,19 +97,21 @@ export default function Home() {
                 setIsFetching(false);
                 router.replace('/login');
             }
-            else {                
-                    const profile = res.data.data;
-                    setProfileData(profile);
-                    setUserId(profile?.id);
+            else {
+                const profile = res.data.data;
+                // console.log(res.data.data, 'profile data')
+                console.log(res.data.data, 'res data data')
+                setProfileData(profile);
+                setUserId(res.data.data.id);
 
-                    // Simpan userId di SecureStore
-                    await SecureStore.setItemAsync("userId", profile?.id.toString());
-                    console.log(`UserId (${profile?.id}) saved to SecureStore`);
-                }
+                // Simpan userId di SecureStore
+                await SecureStore.setItemAsync("userId", res?.data?.data?.id.toString());
+                console.log(`UserId (${res.data?.data?.id}) saved to SecureStore`);
             }
-
         }
+
     }
+
 
 
     const fetchHistory = async (userID, setHistoryItems) => {
@@ -183,8 +185,6 @@ export default function Home() {
             fetchHistory(profileData.id, setHistoryData);
         }
     }, [profileData.id]);
-
-
 
 
     const navigation = useNavigation();
