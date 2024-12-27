@@ -11,7 +11,7 @@ const handleBuatArena = () => {
 }
 
 const handleGabungArena = () => {
-    router.replace('online/joinroom');
+    router.push('online/joinroom');
 }
 
 export default function OnlineModal() {

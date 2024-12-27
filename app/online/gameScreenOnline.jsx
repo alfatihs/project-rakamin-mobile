@@ -11,8 +11,10 @@ const gestures = [
 
 export default function GameScreenOnline() {
   const router = useRouter();
-  const { userScore: initialUserScore = 0, computerScore: initialComputerScore = 0 } =
-    useLocalSearchParams();
+  const {
+    userScore: initialUserScore = 0,
+    computerScore: initialComputerScore = 0,
+  } = useLocalSearchParams();
   const [countdown, setCountdown] = useState(5);
   const [userPick, setUserPick] = useState(null);
   const [roomId, setRoomId] = useState(null); // Ganti dengan room ID dinamis
@@ -26,12 +28,17 @@ export default function GameScreenOnline() {
         const roomId = await SecureStore.getItemAsync("roomID");
         if (token && roomId) {
           setBearerToken(token);
-          setRoomId(roomId)
+          setRoomId(roomId);
         } else {
-          console.error("Bearer token dan room id tidak ditemukan di SecureStorage");
+          console.error(
+            "Bearer token dan room id tidak ditemukan di SecureStorage"
+          );
         }
       } catch (error) {
-        console.error("Error fetching token and room id from SecureStorage:", error.message);
+        console.error(
+          "Error fetching token and room id from SecureStorage:",
+          error.message
+        );
       }
     };
 
@@ -74,26 +81,34 @@ export default function GameScreenOnline() {
     }
 
     try {
-      const response = await fetch("https://project-rakamin-api.vercel.app/game/finish", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify({
-          roomId: roomId,
-          handPosition: handPosition,
-        }),
-      });
+      console.log("roomId:", roomId);
+      console.log("handPosition:", handPosition);
+      console.log("bearerToken:", bearerToken);
+      const response = await fetch(
+        "https://project-rakamin-api.vercel.app/game/finish",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+          body: JSON.stringify({
+            roomId: roomId,
+            handPosition: handPosition,
+          }),
+        }
+      );
+      
+      const data = await response.json(); // Baca respons dari server
 
       if (!response.ok) {
-        throw new Error("Failed to send game data");
+        console.error("Error Response Data:", data); // Log detail error dari server
+        throw new Error(data.message || "Failed to send game data");
       }
 
-      const data = await response.json();
       console.log("API Response:", data);
 
-      router.replace("/gameScreenLoading")
+      router.replace("/online/gameLoadingScreen");
     } catch (error) {
       console.error("Error sending game data:", error.message);
     }

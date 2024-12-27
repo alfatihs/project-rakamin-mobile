@@ -13,8 +13,8 @@ export default function GameLoadingScreen() {
   useEffect(() => {
     const fetchCredentials = async () => {
       try {
-        const storedRoomId = await SecureStore.getItemAsync("roomId");
-        const storedToken = await SecureStore.getItemAsync("bearerToken");
+        const storedRoomId = await SecureStore.getItemAsync("roomID");
+        const storedToken = await SecureStore.getItemAsync("authToken");
 
         if (!storedRoomId || !storedToken) {
           throw new Error("Room ID atau Bearer Token tidak ditemukan");
@@ -57,7 +57,7 @@ export default function GameLoadingScreen() {
 
       // Logika untuk menentukan kapan navigasi ke result
       if ((draw && win === null && lose === null) || (!draw && (win !== null || lose !== null))) {
-        router.push("/resultOnline"); // Pindah ke halaman result
+        router.push("/online/resultOnline"); // Pindah ke halaman result
       }
     } catch (error) {
       console.error("Error fetching game status:", error.message);

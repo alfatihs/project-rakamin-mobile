@@ -8,7 +8,6 @@ import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-
 const dataSample = [
     {
         id: 1,
@@ -49,6 +48,7 @@ const renderItem = ({ item }) => (
 const backgroundImagePath = require('./../../assets/background-image.png')
 
 export default function Home() {
+    const [userId, setUserId] = useState("");
     const [profileData, setProfileData] = useState({
         avatar: "",
         email: "",
@@ -72,14 +72,22 @@ export default function Home() {
                     }
                 );
                 console.log(res.data, res.status, 'res')
+                
                 if (res.status !== 200) {
                     alert('Terjadi kesalahan. Silakan login kembali');
                     router.replace('/login');
                 }
                 else {
-                    console.log(res.data.data, 'data');
-                    setProfileData(res.data.data);
+                    const profile = res.data.data;
+                    setProfileData(profile);
+                    setUserId(profile?.id);
+
+                    // Simpan userId di SecureStore
+                    await SecureStore.setItemAsync("userId", profile?.id.toString());
+                    console.log(`UserId (${profile?.id}) saved to SecureStore`);
                 }
+
+
             }
         }
         getProfileData();

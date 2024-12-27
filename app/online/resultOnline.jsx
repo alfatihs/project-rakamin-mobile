@@ -1,89 +1,125 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
+import { View, Image, StyleSheet, Modal, TouchableOpacity, Text } from "react-native";
+import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 
-// Gesture images for user (blue shirt)
+// Gesture images for player 1 (blue shirt)
 const userGestures = {
   rock: require("../../assets/rock.png"),
   paper: require("../../assets/paper.png"),
   scissors: require("../../assets/scissors.png"),
 };
 
-// Gesture images for computer (red shirt)
+// Gesture images for player 2 (red shirt)
 const computerGestures = {
   rock: require("../../assets/computer-rock.png"),
   paper: require("../../assets/computer-paper.png"),
   scissors: require("../../assets/computer-scissors.png"),
 };
 
-export default function ResultScreen() {
+// Result images for modal
+const resultImages = {
+  win: require("../../assets/win.png"),
+  draw: require("../../assets/draw.png"),
+  lose: require("../../assets/lose.png"),
+};
+
+// Background image with stars
+const modalBackgroundImage = require("../../assets/modal-background.png");
+
+// Play again button image
+const playAgainButtonImage = require("../../assets/play-again.png");
+
+export default function ResultScreenOnline() {
   const router = useRouter();
-  let { userChoice, computerChoice, userScore, computerScore } =
-    useLocalSearchParams();
+  const [player1Choice, setPlayer1Choice] = useState(null);
+  const [player2Choice, setPlayer2Choice] = useState(null);
+  const [result, setResult] = useState(null); // win, lose, draw
+  const [modalVisible, setModalVisible] = useState(false);
+  const [roomId, setRoomId] = useState(null);
+  const [bearerToken, setBearerToken] = useState(null);
+  const [localUserId, setLocalUserId] = useState(null);
 
-    if (userChoice === "none"){
-        userChoice = null
-    }
-  const [countdown, setCountdown] = useState(5);
-  const [scores, setScores] = useState({
-    user: parseInt(userScore) || 0,
-    computer: parseInt(computerScore) || 0,
-  });
-
-  // Determine the winner and update scores
+  // Fetch roomId, bearerToken, and userId
   useEffect(() => {
-    const result = determineWinner(userChoice, computerChoice);
-    if (result === "user") {
-      setScores((prev) => ({ ...prev, user: prev.user + 1 }));
-    } else if (result === "computer") {
-      setScores((prev) => ({ ...prev, computer: prev.computer + 1 }));
-    }
+    const fetchCredentials = async () => {
+      try {
+        const token = await SecureStore.getItemAsync("authToken");
+        const roomID = await SecureStore.getItemAsync("roomID");
+        const userId = await SecureStore.getItemAsync("userId"); // Simpan user ID lokal di SecureStore
+        if (token && roomID && userId) {
+          setBearerToken(token);
+          setRoomId(roomID);
+          setLocalUserId(userId); // Set user ID lokal
+        } else {
+          console.error("Bearer token, room ID, atau user ID tidak ditemukan.");
+        }
+      } catch (error) {
+        console.error("Error fetching credentials:", error.message);
+      }
+    };
+
+    fetchCredentials();
   }, []);
 
-  // Countdown logic
+  // Fetch game data from API
   useEffect(() => {
-    if (countdown <= 0) {
-      router.replace({
-        pathname: "/offline/gameScreenOffline",
-        params: {
-          userScore: scores.user,
-          computerScore: scores.computer,
-        },
-      });
-      return;
-    }
+    const fetchGameData = async () => {
+      if (!roomId || !bearerToken || !localUserId) return;
 
-    const timer = setInterval(() => {
-      setCountdown((prev) => prev - 1);
-    }, 1000);
+      try {
+        const response = await fetch(
+          "https://project-rakamin-api.vercel.app/rooms/info",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken}`,
+            },
+            body: JSON.stringify({ roomId }),
+          }
+        );
 
-    return () => clearInterval(timer);
-  }, [countdown]);
+        if (!response.ok) {
+          throw new Error("Failed to fetch game data.");
+        }
 
-  // Determine the winner
-  const determineWinner = (user, computer) => {
-    if (user === computer) return "draw";
-    if (
-      (user === "rock" && computer === "scissors") ||
-      (user === "scissors" && computer === "paper") ||
-      (user === "paper" && computer === "rock")
-    ) {
-      return "user";
-    }
-    return "computer";
-  };
+        const data = await response.json();
+        const gameData = data.data;
+
+        // Update player choices
+        setPlayer1Choice(gameData.hand_position_p1); // Player 1 choice
+        setPlayer2Choice(gameData.hand_position_p2); // Player 2 choice
+
+        // Determine result based on userId
+        const userId = parseInt(localUserId, 10); // Konversi ke integer
+        if (gameData.draw) {
+          setResult("draw");
+        } else if (gameData.win && gameData.win === userId) {
+          setResult("win");
+        } else if (gameData.lose && gameData.lose === userId) {
+          setResult("lose");
+        }
+
+        // Show modal after 3 seconds
+        setTimeout(() => setModalVisible(true), 3000);
+      } catch (error) {
+        console.error("Error fetching game data:", error.message);
+      }
+    };
+
+    fetchGameData();
+  }, [roomId, bearerToken, localUserId]);
 
   return (
     <View style={styles.container}>
-
       {/* Result Hands */}
       <View style={styles.handsContainer}>
-        {/* User Hand */}
+        {/* Player 1 Hand */}
         <View style={styles.resultBox}>
-          {userChoice ? (
+          {player1Choice ? (
             <Image
-              source={userGestures[userChoice]}
+              source={userGestures[player1Choice]}
               style={styles.handImageUser}
             />
           ) : (
@@ -91,11 +127,11 @@ export default function ResultScreen() {
           )}
         </View>
 
-        {/* Computer Hand */}
+        {/* Player 2 Hand */}
         <View style={styles.resultBox}>
-          {computerChoice ? (
+          {player2Choice ? (
             <Image
-              source={computerGestures[computerChoice]}
+              source={computerGestures[player2Choice]}
               style={styles.handImageComputer}
             />
           ) : (
@@ -104,6 +140,37 @@ export default function ResultScreen() {
         </View>
       </View>
 
+      {/* Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          {/* Background with stars */}
+          <Image source={modalBackgroundImage} style={styles.modalBackground} />
+
+          {/* Close Button */}
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => router.replace("/(private)")}
+          >
+            <Image source={require("../../assets/close.png")} style={styles.closeImage} />
+          </TouchableOpacity>
+
+          {/* Modal Content */}
+          <View style={styles.modalContent}>
+            {/* Result Image */}
+            {result && <Image source={resultImages[result]} style={styles.resultImage} />}
+
+            {/* Play Again Button */}
+            <TouchableOpacity onPress={() => router.replace("/playAgain")}>
+              <Image source={playAgainButtonImage} style={styles.playAgainButton} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -114,21 +181,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#0C356A",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
-  },
-  finishButton: {
-    position: "absolute",
-    top: 40,
-    right: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5, // Jarak antara teks dan ikon
-    marginTop: 30
-  },
-  finishText: {
-    color: "#FFF0CE",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   handsContainer: {
     flexDirection: "row",
@@ -159,38 +211,42 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderRadius: 8,
   },
-  scoreBox: {
-    marginTop: 10,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    alignItems: "center",
+  modalContainer: {
+    backgroundColor: "rgba(32, 32, 32, 0.5)",
+    flex: 1,
     justifyContent: "center",
-    alignSelf: 'flex-start'
-  },
-  scoreBoxComputer: {
-    marginTop: 10,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
     alignItems: "center",
-    justifyContent: "center",
-    alignSelf: 'flex-end'
   },
-  scoreText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  countdownText: {
+  modalBackground: {
     position: "absolute",
-    bottom: 30,
-    color: "#FFF0CE",
-    fontSize: 16,
-    textAlign: "center",
-    fontWeight: "bold",
-    marginBottom: 40
+    width: "78%",
+    height: "60%",
+    resizeMode: "cover",
+  },
+  modalContent: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    marginTop: 40
+  },
+  closeImage: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
+  },
+  resultImage: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+  },
+  playAgainButton: {
+    width: 178,
+    height: 50,
+    resizeMode: "contain",
+    alignItems: "baseline",
   },
 });

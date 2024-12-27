@@ -49,6 +49,7 @@ export default function JoinRoom() {
 
             if (response.data.data.gameStatus === 'playing') {
                 console.log('room is active, getting room data..')
+                await SecureStore.setItemAsync('roomID', response.data.data.roomId.toString());
                 router.replace({
                     pathname: '/online/ready',
                    params: {
