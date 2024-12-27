@@ -36,6 +36,7 @@ export default function GameLoadingScreen() {
 
     setIsFetching(true);
     try {
+      console.log('fetching!')
       const response = await fetch(
         `https://project-rakamin-api.vercel.app/rooms/info`,
         {
@@ -53,6 +54,7 @@ export default function GameLoadingScreen() {
       }
 
       const data = await response.json();
+      console.log(data.data, 'hasil response!')
       const { draw, win, lose } = data.data;
 
       // Logika untuk menentukan kapan navigasi ke result
