@@ -69,6 +69,7 @@ export default function SelectMode() {
         >
             {modalVisible && <ModalOverlay />}
             <View style={{ paddingHorizontal: 35, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+
                 <TouchableOpacity onPress={() => router.push('offline')} style={{ marginBottom: 22 }}  >
                     <Image style={{ borderRadius: 8, marginBottom: -20 }} source={require('./../../assets/vs-computer.png')}></Image>
                     <PlayButton text='vs Komputer' onPress={() => router.push('offline')} fontSize={26} width={226}></PlayButton>
@@ -77,6 +78,10 @@ export default function SelectMode() {
                     <Image style={{ borderRadius: 8, marginBottom: -20 }} source={require('./../../assets/vs-player.png')}></Image>
                     <PlayButton text='vs Manusia' onPress={() => { setModalVisible(true) }} fontSize={26} width={226}></PlayButton>
                 </TouchableOpacity>
+                {/* <TouchableOpacity style={{ marginTop: 20, flexDirection: 'row', alignItems: "center", alignSelf: 'flex-end', backgroundColor: '#c6c6c6', paddingHorizontal: 10, borderRadius: 20, paddingVertical: 3 }} onPress={() => router.push('/tutorial')}>
+                    <Ionicons name='information-circle-outline' size={16} color={'white'}></Ionicons>
+                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 12, color: 'white' }}>Lihat Panduan Bermain</Text>
+                </TouchableOpacity> */}
             </View>
 
         </ImageBackground >

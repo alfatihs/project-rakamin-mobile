@@ -61,7 +61,7 @@ export default function RegisterAvatarScreen() {
       });
       console.log("Register success:", res.data);
       Alert.alert("Berhasil Daftar", "Akun berhasil dibuat!");
-      router.replace("/login");
+      router.replace("/tutorial");
     } catch (error) {
       console.log("Error register:", error);
       Alert.alert("Gagal Daftar", "Silakan periksa koneksi atau data Anda.");

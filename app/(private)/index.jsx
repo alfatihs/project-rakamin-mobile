@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground } from "react-native";
 import ProfilePhoto from "../../components/ProfilePhoto";
-import Ionicons from '@expo/vector-icons/Ionicons';
 import PlayButton from "../../components/PlayButton";
 import LogoutButton from "../../components/LogoutButton";
 import { useNavigation, router } from 'expo-router';
@@ -8,6 +7,8 @@ import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import HomePlaceholder from "../../components/HomePlaceholder";
+
 
 const PROFILE_API_URL = "https://project-rakamin-api.vercel.app/profile";
 const HISTORY_API_URL = "https://project-rakamin-api.vercel.app/history";
@@ -59,6 +60,7 @@ const renderItem = ({ item }) => {
 const backgroundImagePath = require('./../../assets/background-image.png')
 
 export default function Home() {
+    const [isFetching, setIsFetching] = useState(false);
     const [profileData, setProfileData] = useState({
         avatar: "",
         email: "",
@@ -70,9 +72,11 @@ export default function Home() {
     const [historyData, setHistoryData] = useState([])
 
     const getProfileData = async () => {
+        setIsFetching(true);
         const authToken = await SecureStore.getItemAsync('authToken');
         if (!authToken) {
             alert('Anda harus login terlebih dahulu');
+            setIsFetching(false);
             router.replace('/login');
         }
         else {
@@ -86,11 +90,13 @@ export default function Home() {
             // console.log(res.data, res.status, 'res')
             if (res.status !== 200) {
                 alert('Terjadi kesalahan. Silakan login kembali');
+                setIsFetching(false);
                 router.replace('/login');
             }
             else {
                 // console.log(res.data.data, 'data');
                 setProfileData(res.data.data);
+
             }
 
         }
@@ -99,11 +105,14 @@ export default function Home() {
 
     const fetchHistory = async (userID, setHistoryItems) => {
         try {
+
             console.log(userID, 'userID!')
             // Retrieve auth token
+            setIsFetching(true);
             const authToken = await SecureStore.getItemAsync('authToken');
             if (!authToken) {
                 console.error("Auth token is missing.");
+                setIsFetching(false);
                 return;
             }
 
@@ -115,16 +124,17 @@ export default function Home() {
 
             if (response.status !== 200) {
                 console.error("Failed to fetch history data.");
+                setIsFetching(false);
                 return;
             }
             else {
-                console.log(response.data.data, 'response data!');
+                // console.log(response.data.data, 'response data!');
             }
 
 
             const formattedData = Object.values(response?.data.data).map((item) => {
                 const isPlayer1 = item?.player1_id === userID; // Determine if we are Player 1
-                console.log('player 1?', isPlayer1)
+                // console.log('player 1?', isPlayer1)
                 const result = isPlayer1
                     ? item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose'
                     : item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose';
@@ -132,7 +142,7 @@ export default function Home() {
                     ? item.player2_avatar || 'https://via.placeholder.com/64'
                     : item.player1_avatar || 'https://via.placeholder.com/64';
 
-                console.log(opponentAvatar, 'opponentAvatar', isPlayer1, 'player1?')
+                // console.log(opponentAvatar, 'opponentAvatar', isPlayer1, 'player1?')
 
                 return {
                     id: item.id,
@@ -144,7 +154,9 @@ export default function Home() {
 
             // Set history items
             setHistoryItems(formattedData);
+            setIsFetching(false);
         } catch (err) {
+            setIsFetching(false);
             if (err.response?.status === 401) {
                 console.error("Authentication failed. Please check your token.");
             } else {
@@ -167,40 +179,43 @@ export default function Home() {
 
     const navigation = useNavigation();
     return (
-        <ImageBackground style={{ padding: 20, flex: 1, justifyContent: 'space-between' }} source={backgroundImagePath} resizeMode="cover">
-            <View>
-                <LogoutButton onPress={() => {
-                    navigation.popTo('login');
-                    SecureStore.deleteItemAsync('authToken');
-                }}></LogoutButton>
-                <View style={{ alignItems: "center", rowGap: 13 }}>
-                    <ProfilePhoto imgurl={profileData?.avatar}></ProfilePhoto>
-                    <Text style={{ textAlign: 'center', fontSize: 18, color: '#0c356a', fontFamily: 'Poppins-Bold' }}>{`Hi ${profileData?.name} !`}</Text>
-                    <Text style={{ textAlign: 'center', color: '#0c356a', fontFamily: 'Poppins-Regular' }}>Lihat peringkatmu <Text style={{ fontWeight: 'bold' }} onPress={() => router.navigate('leaderboard')} >di sini</Text></Text>
+        isFetching ? <HomePlaceholder></HomePlaceholder> :
+            <ImageBackground style={{ padding: 20, flex: 1, justifyContent: 'space-between' }} source={backgroundImagePath} resizeMode="cover">
+                <View>
+                    <LogoutButton onPress={() => {
+                        navigation.popTo('login');
+                        SecureStore.deleteItemAsync('authToken');
+                    }}></LogoutButton>
+                    <View style={{ alignItems: "center", rowGap: 13 }}>
+                        <ProfilePhoto imgurl={profileData?.avatar}></ProfilePhoto>
+                        <Text style={{ textAlign: 'center', fontSize: 18, color: '#0c356a', fontFamily: 'Poppins-Bold' }}>{`Hi ${profileData?.name} !`}</Text>
+                        <Text style={{ textAlign: 'center', color: '#0c356a', fontFamily: 'Poppins-Regular' }}>Lihat peringkatmu <Text style={{ fontFamily: 'Poppins-Bold' }} onPress={() => router.navigate('leaderboard')} >di sini</Text></Text>
+                    </View>
                 </View>
-            </View>
-            <PlayButton text='Main' onPress={() => router.push('selectmode')} fontSize={36} width={162} />
-            <View style={{ widht: '100%', rowGap: 20, height: 200 }}>
-                <TouchableOpacity onPress={() => router.push({
-                    pathname: 'history',
-                    params: {
-                        userID: profileData.id
-                    }
-                })}>
-                    <Text style={{ fontFamily: 'Poppins-Bold' }}>{`Riwayat Permainan >`}</Text>
-                </TouchableOpacity>
-                <FlatList
-                    data={historyData}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderItem}
-                    horizontal={true}
-                    contentContainerStyle={{ gap: 10 }}
-                    showsHorizontalScrollIndicator={false}
-                // style={{ backgroundColor: 'red', height: 20 }}
+                <PlayButton text='Main' onPress={() => router.push('selectmode')} fontSize={36} width={172} />
+                <View style={{ widht: '100%', rowGap: 20, height: 200 }}>
+                    <TouchableOpacity onPress={() => router.push({
+                        pathname: 'history',
+                        params: {
+                            userID: profileData.id
+                        }
+                    })}>
+                        <Text style={{ fontFamily: 'Poppins-Bold' }}>{`Riwayat Permainan >`}</Text>
+                    </TouchableOpacity>
+                    <FlatList
+                        data={historyData}
+                        keyExtractor={(item) => item.id}
+                        renderItem={renderItem}
+                        horizontal={true}
+                        contentContainerStyle={{ gap: 10 }}
+                        showsHorizontalScrollIndicator={false}
+                        item
 
-                >
-                </FlatList>
-            </View>
-        </ ImageBackground>
+                    // style={{ backgroundColor: 'red', height: 20 }}
+
+                    >
+                    </FlatList>
+                </View>
+            </ ImageBackground>
     )
 }

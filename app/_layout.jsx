@@ -18,6 +18,7 @@ export default function Layout() {
             <Stack.Screen name="register" options={{ title: 'Register', headerShown: false }} />
             <Stack.Screen name="tnc" options={{ presentation: 'modal', title: 'Terms and Condition' }} />
             <Stack.Screen name="register-avatar" options={{ headerShown: false }} />
+            <Stack.Screen name='tutorial' options={{ headerShown: false }}/>
         </Stack >
     );
 }
