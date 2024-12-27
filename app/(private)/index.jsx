@@ -97,10 +97,15 @@ export default function Home() {
                 setIsFetching(false);
                 router.replace('/login');
             }
-            else {
-                // console.log(res.data.data, 'data');
-                setProfileData(res.data.data);
+            else {                
+                    const profile = res.data.data;
+                    setProfileData(profile);
+                    setUserId(profile?.id);
 
+                    // Simpan userId di SecureStore
+                    await SecureStore.setItemAsync("userId", profile?.id.toString());
+                    console.log(`UserId (${profile?.id}) saved to SecureStore`);
+                }
             }
 
         }

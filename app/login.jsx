@@ -120,7 +120,7 @@ export default function Login() {
             style={styles.logo}
           />
 
-          <Text style={styles.label}>Nama</Text>
+          <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
             placeholder="Masukkan email"
