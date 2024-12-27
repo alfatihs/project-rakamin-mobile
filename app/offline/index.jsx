@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   countdown: {
     fontSize: 48,
-    fontWeight: "bold",
+    fontFamily: "Poppins-Bold",
     color: "#0C356A",
   },
 });

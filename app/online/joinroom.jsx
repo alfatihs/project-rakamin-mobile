@@ -4,6 +4,7 @@ import Button from "../../components/ButtonAuth";
 import axios from "axios";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import BackButton from "../../components/BackButton";
 
 const backgroundImagePath = require('./../../assets/background-joinroom.png')
 
@@ -52,21 +53,22 @@ export default function JoinRoom() {
                 await SecureStore.setItemAsync('roomID', response.data.data.roomId.toString());
                 router.replace({
                     pathname: '/online/ready',
-                   params: {
+                    params: {
                         roomID: roomID,
                         player1_name: response.data.data.p1.name,
-                        player1_image : response.data.data.p1.avatar,
+                        player1_image: response.data.data.p1.avatar,
                         player2_name: response.data.data.p2.name,
-                        player2_image : response.data.data.p2.avatar
-                   }
+                        player2_image: response.data.data.p2.avatar
+                    }
                 })
-                
+
             }
             else {
                 alert('Gagal bergabung ke Arena');
             }
         } catch (error) {
             console.error('Error joining room:', error);
+            alert('Gagal bergabung ke Arena!');
         }
     }
 
@@ -80,8 +82,11 @@ export default function JoinRoom() {
         }}
 
         >
+            <View style={{ position: 'absolute', left: 20, top: 20, backgroundColor: 'white', borderRadius: 100 }}>
+                <BackButton onPress={() => router.back()} />
+            </View>
 
-            <Text style={{ fontWeight: 'bold' }}>Masukkan kode Arena di bawah ini!</Text>
+            <Text style={{ fontFamily: 'Poppins-Bold' }}>Masukkan kode Arena di bawah ini!</Text>
             <TextInput
                 value={roomID}
                 onChangeText={(text) => setRoomID(text)}

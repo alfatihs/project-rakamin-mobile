@@ -35,7 +35,7 @@ export default function RegisterDataScreen() {
       setErrors({ name: "", email: "", password: "" });
       registerSchema.parse({ name, email, password });
       // Jika valid, lanjut ke halaman lain
-      
+
       router.push({
         pathname: "/register-avatar",
         params: { name, email, password },
@@ -71,6 +71,7 @@ export default function RegisterDataScreen() {
               <View style={styles.activeBar} />
               <View style={styles.inactiveBar} />
             </View>
+            <Text style={{ fontFamily: 'Poppins-Bold', textAlign: 'center', color: '#0c356a', fontSize: 16, paddingTop: 20 }}>Registrasi</Text>
           </View>
 
           {/* MIDDLE: Form */}
@@ -120,7 +121,7 @@ export default function RegisterDataScreen() {
               <Text style={styles.buttonText}>Lanjut</Text>
             </Pressable>
             <View style={styles.bottomTextContainer}>
-              <Text>Sudah punya akun? </Text>
+              <Text style={{ fontFamily: 'Poppins-Regular' }}>Sudah punya akun? </Text>
               <Link href="/login" style={{ fontWeight: "600" }}>
                 Masuk
               </Link>
