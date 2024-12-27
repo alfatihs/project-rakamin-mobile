@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import { z } from "zod";
+import { useMusic } from "./providers/MusicProvider";
 
 const registerSchema = z.object({
   name: z.string().min(3, "Nama minimal 3 karakter"),
@@ -18,6 +19,7 @@ const registerSchema = z.object({
 });
 
 export default function RegisterDataScreen() {
+  const { playClickSound } = useMusic();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -117,7 +119,7 @@ export default function RegisterDataScreen() {
 
           {/* BOTTOM: Tombol & Link */}
           <View style={styles.bottomContainer}>
-            <Pressable style={styles.button} onPress={handleNext}>
+            <Pressable style={styles.button} onPress={() => { playClickSound(); handleNext() }}>
               <Text style={styles.buttonText}>Lanjut</Text>
             </Pressable>
             <View style={styles.bottomTextContainer}>

@@ -8,6 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { ImageBackground } from "react-native";
 import LeaderboardPlaceholder from "../../components/LeaderboardPlaceholder";
+import { useMusic } from "../providers/MusicProvider";
 
 const rank1path = require("./../../assets/rank1.png");
 const rank2path = require("./../../assets/rank2.png");
@@ -16,6 +17,7 @@ const medalpath = require("./../../assets/medal.png");
 
 
 export default function Leaderboard() {
+    const { playClickSound } = useMusic();
     const [isFetching, setIsFetching] = useState(false);
     const [authToken, setAuthToken] = useState("");
     const [leaderboardItems, setLeaderboardItems] = useState([]);
@@ -102,7 +104,7 @@ export default function Leaderboard() {
                         zIndex: 2
                     }}
                 >
-                    <BackButton onPress={() => router.back()} />
+                    <BackButton onPress={() => { playClickSound(); router.back() }} />
                 </View>
                 <View style={{ flex: 1 }}>
                     {/* Top section with the leaderboard */}

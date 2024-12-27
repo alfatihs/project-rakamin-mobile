@@ -7,6 +7,7 @@ import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { router } from "expo-router";
 import BackButton from "../../components/BackButton";
+import { useMusic } from "../providers/MusicProvider";
 
 
 
@@ -17,6 +18,7 @@ const CREATE_ROOM_API_URL = "https://project-rakamin-api.vercel.app/rooms";
 
 
 export default function RoomMaster() {
+    const { playClickSound } = useMusic();
 
     const [roomID, setRoomID] = useState(0);
     const [player1_name, setPlayer1_name] = useState(null);
@@ -53,7 +55,7 @@ export default function RoomMaster() {
                 const authToken = await SecureStore.getItemAsync('authToken');
                 if (!authToken) {
                     Alert.alert('Authentication Required', 'Anda harus login terlebih dahulu!', [
-                        { text: 'OK', onPress: () => router.replace('/login') },
+                        { text: 'OK', onPress: () => { playClickSound(); router.replace('/login') } },
                     ]);
                     setFetchingRoomData(false);
                     return;
@@ -151,7 +153,7 @@ export default function RoomMaster() {
             const authToken = await SecureStore.getItemAsync('authToken');
             if (!authToken) {
                 Alert.alert('Authentication Required', 'Anda harus login terlebih dahulu!', [
-                    { text: 'OK', onPress: () => router.replace('/login') },
+                    { text: 'OK', onPress: () => { playClickSound(); router.replace('/login') } },
                 ]);
                 return;
             }
@@ -194,7 +196,7 @@ export default function RoomMaster() {
     return (
         <ImageBackground source={backgroundImagePath} style={{ flex: 1, paddingHorizontal: 35, paddingVertical: 63 }}>
             <View style={{ position: 'absolute', left: 20, top: 20, backgroundColor: 'white', borderRadius: 100 }}>
-                <BackButton onPress={() => router.back()} />
+                <BackButton onPress={() => { playClickSound(); router.back() }} />
             </View>
             <View>
                 {fetchingRoomData ? (<>
@@ -208,7 +210,7 @@ export default function RoomMaster() {
                         <Text style={{ marginBottom: 6, fontFamily: 'Poppins-Regular' }}>Bagikan kode Arena ke teman mu!</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 82 }}>
                             <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 20 }}>{`ID room: ${roomID}`}</Text>
-                            <TouchableOpacity onPress={copyToClipboard} style={{
+                            <TouchableOpacity onPress={() => { playClickSound(); copyToClipboard() }} style={{
                                 backgroundColor: '#FFC436',
                                 borderRadius: 100,
                                 padding: 4,

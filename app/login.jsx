@@ -16,6 +16,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import CheckBox from "expo-checkbox";
 import Button from "../components/ButtonAuth";
+import { useMusic } from "./providers/MusicProvider";
 
 const loginSchema = z.object({
   email: z.string().nonempty("Email wajib diisi").email("Format email tidak valid"),
@@ -26,6 +27,7 @@ const loginSchema = z.object({
 });
 
 export default function Login() {
+  const { playClickSound } = useMusic();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -160,7 +162,10 @@ export default function Login() {
               />
               <Text style={styles.checkBoxLabel}>Ingat Saya</Text>
             </View>
-            <Pressable onPress={() => Alert.alert("Fitur lupa password belum ada")}>
+            <Pressable onPress={() => {
+              playClickSound()
+              Alert.alert("Fitur lupa password belum ada")
+            }}>
               <Text style={{ color: "#19918F" }}>Lupa Password</Text>
             </Pressable>
           </View>
@@ -168,7 +173,7 @@ export default function Login() {
           {isLoading ? (
             <ActivityIndicator size="large" color="#FFC436" />
           ) : (
-            <Button text="Masuk" onPress={handleLogin} bgColor="#0C356A" />
+            <Button text="Masuk" onPress={() => { playClickSound(); handleLogin() }} bgColor="#0C356A" />
           )}
 
           <View style={{ flexDirection: "row", marginTop: 10 }}>

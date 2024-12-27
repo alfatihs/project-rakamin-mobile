@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { View, Text, Image, ImageBackground } from "react-native";
 import { useRouter, useRootNavigationState } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-// import Tutorial from './tutorial'
-
 
 export default function Index() {
     const router = useRouter();
@@ -13,7 +11,6 @@ export default function Index() {
             console.log(authToken, 'hasil authtoken ');
             if (authToken) {
                 router.replace('/(private)');
-                // router.replace('/tutorial');
             } else {
                 router.replace('/login');
             }
