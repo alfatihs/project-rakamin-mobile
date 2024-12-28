@@ -61,11 +61,11 @@ export default function RegisterAvatarScreen() {
         password,
         avatar: selectedAvatar,
       });
-      console.log("Register success:", res.data);
+      // console.log("Register success:", res.data);
       Alert.alert("Berhasil Daftar", "Akun berhasil dibuat!");
       router.replace("/tutorial");
     } catch (error) {
-      console.log("Error register:", error);
+      // console.log("Error register:", error);
       Alert.alert("Gagal Daftar", "Silakan periksa koneksi atau data Anda.");
     } finally {
       setIsLoading(false); // <-- Berhenti loading

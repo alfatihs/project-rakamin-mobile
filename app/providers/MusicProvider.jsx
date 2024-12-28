@@ -7,6 +7,9 @@ const MusicContext = createContext();
 export const MusicProvider = ({ children }) => {
   const sound = useRef(null);
   const clicksound = useRef(null);
+  const winSound = useRef(null);
+  const loseSound = useRef(null);
+  const drawSound = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
 
@@ -20,10 +23,28 @@ export const MusicProvider = ({ children }) => {
       await sound.current.setVolumeAsync(0.3);
       await sound.current.playAsync();
 
+
       const { sound: loadedClickSound } = await Audio.Sound.createAsync(
         require('./../../assets/click.mp3')
       );
       clicksound.current = loadedClickSound;
+
+      const { sound: loadedWinSound } = await Audio.Sound.createAsync(
+        require('./../../assets/win.mp3')
+      );
+      winSound.current = loadedWinSound;
+
+      const { sound: loadedLoseSound } = await Audio.Sound.createAsync(
+        require('./../../assets/lose.mp3')
+      );
+      loseSound.current = loadedLoseSound;
+
+      const { sound: loadedDrawSound } = await Audio.Sound.createAsync(
+        require('./../../assets/draw.mp3')
+      );
+      drawSound.current = loadedDrawSound;
+
+
     };
 
     loadAndPlayMusic();
@@ -41,7 +62,24 @@ export const MusicProvider = ({ children }) => {
   const playClickSound = async () => {
     if (clicksound.current) {
       await clicksound.current.replayAsync();
-      console.log('click sound played');
+    }
+  }
+
+  const playWinSound = async () => {
+    if (winSound.current) {
+      await winSound.current.replayAsync();
+    }
+  }
+
+  const playLoseSound = async () => {
+    if (loseSound.current) {
+      await loseSound.current.replayAsync();
+    }
+  }
+
+  const playDrawSound = async () => {
+    if (drawSound.current) {
+      await drawSound.current.replayAsync();
     }
   }
 
@@ -74,7 +112,7 @@ export const MusicProvider = ({ children }) => {
   };
 
   return (
-    <MusicContext.Provider value={{ isPlaying, isMuted, pauseMusic, resumeMusic, muteMusic, unmuteMusic, playClickSound }}>
+    <MusicContext.Provider value={{ isPlaying, isMuted, pauseMusic, resumeMusic, muteMusic, unmuteMusic, playClickSound, playWinSound, playLoseSound, playDrawSound }}>
       {children}
     </MusicContext.Provider>
   );

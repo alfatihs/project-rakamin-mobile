@@ -18,8 +18,22 @@ const computerGestures = {
   scissors: require("../../assets/computer-scissors.png"),
 };
 
+const determineWinner = (user, computer) => {
+  if (user === computer) return "draw";
+  if (
+    (user === "rock" && computer === "scissors") ||
+    (user === "scissors" && computer === "paper") ||
+    (user === "paper" && computer === "rock")
+  ) {
+    return "user";
+  }
+  return "computer";
+};
+
 export default function ResultScreen() {
-  const { playClickSound } = useMusic();
+  const { playClickSound, playWinSound, playLoseSound, playDrawSound } = useMusic();
+
+
   const router = useRouter();
   let { userChoice, computerChoice, userScore, computerScore } =
     useLocalSearchParams();
@@ -28,18 +42,27 @@ export default function ResultScreen() {
     userChoice = null
   }
   const [countdown, setCountdown] = useState(5);
+  const [result, setResult] = useState(determineWinner(userChoice, computerChoice));
   const [scores, setScores] = useState({
     user: parseInt(userScore) || 0,
     computer: parseInt(computerScore) || 0,
   });
 
+
+
   // Determine the winner and update scores
   useEffect(() => {
     const result = determineWinner(userChoice, computerChoice);
+    setResult(result);
+
     if (result === "user") {
+      playWinSound();
       setScores((prev) => ({ ...prev, user: prev.user + 1 }));
     } else if (result === "computer") {
+      playLoseSound();
       setScores((prev) => ({ ...prev, computer: prev.computer + 1 }));
+    } else {
+      playDrawSound();
     }
   }, []);
 
@@ -64,17 +87,7 @@ export default function ResultScreen() {
   }, [countdown]);
 
   // Determine the winner
-  const determineWinner = (user, computer) => {
-    if (user === computer) return "draw";
-    if (
-      (user === "rock" && computer === "scissors") ||
-      (user === "scissors" && computer === "paper") ||
-      (user === "paper" && computer === "rock")
-    ) {
-      return "user";
-    }
-    return "computer";
-  };
+
 
   return (
     <View style={styles.container}>
@@ -86,6 +99,15 @@ export default function ResultScreen() {
         <Text style={styles.finishText}>Selesaikan</Text>
         <MaterialIcons name="logout" size={20} color="#FFF0CE" />
       </TouchableOpacity>
+
+      <Image source={
+        result === 'user' ? require('./../../assets/win-offline.png') :
+          result === 'computer' ? require('./../../assets/lose-offline.png') :
+            require('./../../assets/draw-offline.png')
+      }
+        style={{ position: 'absolute', top: 50, width: '80%' }}
+        resizeMode="contain"
+      ></Image>
 
       {/* Result Hands */}
       <View style={styles.handsContainer}>

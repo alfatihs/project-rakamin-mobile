@@ -14,7 +14,7 @@ const getAuthToken = async () => {
     try {
         return await SecureStore.getItemAsync('authToken');
     } catch (err) {
-        console.error("An error occurred while fetching auth token:", err.message);
+        // console.error("An error occurred while fetching auth token:", err.message);
     }
 };
 
@@ -33,7 +33,7 @@ export default function History() {
             // Retrieve auth token
             const authToken = await getAuthToken();
             if (!authToken) {
-                console.error("Auth token is missing.");
+                // console.error("Auth token is missing.");
                 setIsFetching(false);
                 return;
             }
@@ -72,9 +72,11 @@ export default function History() {
             setIsFetching(false);
         } catch (err) {
             if (err.response?.status === 401) {
-                console.error("Authentication failed. Please check your token.");
+                // console.error("Authentication failed. Please check your token.");
+                alert('Authentication failed. Please check your token.');
             } else {
-                console.error("An error occurred while fetching data:", err.message);
+                // console.error("An error occurred while fetching data:", err.message);
+                alert('An error occurred while fetching data:', err.message);
             }
             setIsFetching(false);
         }

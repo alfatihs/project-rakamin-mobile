@@ -28,7 +28,9 @@ export default function Leaderboard() {
             try {
                 return await SecureStore.getItemAsync('authToken');
             } catch (err) {
-                console.error("An error occurred while fetching auth token:", err.message);
+                router.replace('/login');
+                // console.error("An error occurred while fetching auth token:", err.message);
+                alert('An error occurred while fetching auth token:', err.message);
             }
         };
 
@@ -38,8 +40,9 @@ export default function Leaderboard() {
 
                 const authToken = await getAuthToken();
                 if (!authToken) {
-                    console.error("Auth token is missing.");
+                    // console.error("Auth token is missing.");
                     setIsFetching(false);
+                    router.replace('/login');
                     return;
                 }
                 setAuthToken(authToken);
@@ -67,9 +70,11 @@ export default function Leaderboard() {
 
             } catch (err) {
                 if (err.response?.status === 401) {
-                    console.error("Authentication failed. Please check your token.");
+                    // console.error("Authentication failed. Please check your token.");
+                    alert('Authentication failed. please relogin');
                 } else {
-                    console.error("An error occurred while fetching data:", err.message);
+                    alert('An error occurred while fetching data');
+                    // console.error("An error occurred while fetching data:", err.message);
                 }
                 setIsFetching(false);
             }

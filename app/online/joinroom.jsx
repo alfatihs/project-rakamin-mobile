@@ -1,4 +1,4 @@
-import { ImageBackground, View, Text, TextInput } from "react-native";
+import { ImageBackground, View, Text, TextInput, ActivityIndicator } from "react-native";
 import { useState } from "react";
 import Button from "../../components/ButtonAuth";
 import axios from "axios";
@@ -15,10 +15,9 @@ const ROOM_INFO_API_URL = "https://project-rakamin-api.vercel.app/rooms/info";
 
 export default function JoinRoom() {
     const { playClickSound } = useMusic();
-    const [player1_id, setPlayer1_id] = useState('');
-    const [player2_id, setPlayer2_id] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [roomID, setRoomID] = useState('');
-    const [authToken, setAuthToken] = useState('');
+    // const [authToken, setAuthToken] = useState
 
     const getAuthToken = async () => {
         const authToken = await SecureStore.getItemAsync('authToken');
@@ -28,14 +27,17 @@ export default function JoinRoom() {
             ]);
             return;
         }
-        setAuthToken(authToken);
         return authToken;
     }
 
     const handleJoinRoom = async () => {
         try {
+            setIsLoading(true);
             const authToken = await getAuthToken();
-            if (!authToken) return;
+            if (!authToken) {
+                setIsLoading(false);
+                return;
+            }
 
             const response = await axios.post(
                 JOIN_ROOM_API_URL,
@@ -48,10 +50,10 @@ export default function JoinRoom() {
                     }
                 }
             );
-            console.log(response.data.data, 'response data')
+            // console.log(response.data.data, 'response data')
 
             if (response.data.data.gameStatus === 'playing') {
-                console.log('room is active, getting room data..')
+                // console.log('room is active, getting room data..')
                 await SecureStore.setItemAsync('roomID', response.data.data.roomId.toString());
                 await SecureStore.setItemAsync('position', 'player2');
                 router.replace({
@@ -70,8 +72,11 @@ export default function JoinRoom() {
                 alert('Gagal bergabung ke Arena');
             }
         } catch (error) {
-            console.error('Error joining room:', error);
+            // console.error('Error joining room:', error);
             alert('Gagal bergabung ke Arena!');
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
@@ -107,7 +112,11 @@ export default function JoinRoom() {
                 }}
             ></TextInput>
 
-            <Button text='Masuk Arena' onPress={() => { playClickSound(); handleJoinRoom() }} bgColor="#0C356A"></Button>
+            {isLoading ? <ActivityIndicator size="large" color="#0c356a" /> :
+                <Button text='Masuk Arena' onPress={() => { playClickSound(); handleJoinRoom() }} bgColor="#0C356A"></Button>
+            }
+
+
 
         </ImageBackground>
     )

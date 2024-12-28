@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import { useMusic } from "../providers/MusicProvider";
 
 const gestures = [
   { name: "rock", image: require("../../assets/rock.png") },
@@ -10,6 +11,7 @@ const gestures = [
 ];
 
 export default function GameScreenOnline() {
+  const { playClickSound } = useMusic();
   const router = useRouter();
   const {
     userScore: initialUserScore = 0,
@@ -30,15 +32,17 @@ export default function GameScreenOnline() {
           setBearerToken(token);
           setRoomId(roomId);
         } else {
-          console.error(
-            "Bearer token dan room id tidak ditemukan di SecureStorage"
-          );
+          // console.error(
+          //   "Bearer token dan room id tidak ditemukan di SecureStorage"
+          // );
+          alert("Bearer token dan room id tidak ditemukan di SecureStorage");
         }
       } catch (error) {
-        console.error(
-          "Error fetching token and room id from SecureStorage:",
-          error.message
-        );
+        // console.error(
+        //   "Error fetching token and room id from SecureStorage:",
+        //   error.message
+        // );
+        alert("Error fetching token and room id from SecureStorage");
       }
     };
 
@@ -76,14 +80,15 @@ export default function GameScreenOnline() {
   // Send game data to API
   const sendGameData = async (handPosition) => {
     if (!bearerToken) {
-      console.error("Bearer token belum tersedia");
+      alert("Token tidak valid");
+      // console.error("Bearer token belum tersedia");
       return;
     }
 
     try {
-      console.log("roomId:", roomId);
-      console.log("handPosition:", handPosition);
-      console.log("bearerToken:", bearerToken);
+      // console.log("roomId:", roomId);
+      // console.log("handPosition:", handPosition);
+      // console.log("bearerToken:", bearerToken);
       const response = await fetch(
         "https://project-rakamin-api.vercel.app/game/finish",
         {
@@ -98,19 +103,20 @@ export default function GameScreenOnline() {
           }),
         }
       );
-      
+
       const data = await response.json(); // Baca respons dari server
 
       if (!response.ok) {
-        console.error("Error Response Data:", data); // Log detail error dari server
+        // console.error("Error Response Data:", data); // Log detail error dari server
         throw new Error(data.message || "Failed to send game data");
       }
 
-      console.log("API Response:", data);
+      // console.log("API Response:", data);
 
       router.replace("/online/gameLoadingScreen");
     } catch (error) {
-      console.error("Error sending game data:", error.message);
+      alert("Gagal mengirim data game");
+      // console.error("Error sending game data:", error.message);
     }
   };
 
@@ -121,7 +127,7 @@ export default function GameScreenOnline() {
           <TouchableOpacity
             key={gesture.name}
             style={styles.handBox}
-            onPress={() => handleUserPick(gesture.name)}
+            onPress={() => { playClickSound(); handleUserPick(gesture.name) }}
           >
             <Image source={gesture.image} style={styles.handImage} />
           </TouchableOpacity>

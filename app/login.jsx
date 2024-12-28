@@ -31,7 +31,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   // Tambahkan state untuk loading saat memeriksa token
@@ -66,7 +66,7 @@ export default function Login() {
           password,
         }
       );
-      console.log(res.data.data.token);
+      // console.log(res.data.data.token);
       await SecureStore.setItemAsync("authToken", res?.data?.data?.token);
       // console.log('token set!', res.data.data.token);
       router.replace("/(private)");
