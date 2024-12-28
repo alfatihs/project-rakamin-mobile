@@ -1,7 +1,7 @@
 import { View, Image, Text } from "react-native";
 
 export default function PlayerCard({ name = '', avatar = '' }) {
-    console.log(avatar, 'player card avatar!')
+    // console.log(avatar, 'player card avatar!')
 
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

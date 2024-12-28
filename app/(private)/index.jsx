@@ -22,6 +22,12 @@ const AvatarGradientColors = {
     draw: ['#d3d3d3', 'rgba(75, 75, 75, 0.1)'], // Light to dark grey
 }
 
+const HistoryPlaceholder = [
+    { id: 3, result: 'draw', avatar: 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Blank.jpg' },
+    { id: 4, result: 'draw', avatar: 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Blank.jpg' },
+    { id: 5, result: 'draw', avatar: 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Blank.jpg' },
+]
+
 const renderItem = ({ item }) => {
     const colors = AvatarGradientColors[item.result] || AvatarGradientColors.draw;
     // console.log(item, 'item!');
@@ -60,7 +66,7 @@ const renderItem = ({ item }) => {
 
     )
 }
-const backgroundImagePath = require('./../../assets/background-image.png')
+const backgroundImagePath = require('./../../assets/home-background.png')
 
 export default function Home() {
     const { isMuted, muteMusic, unmuteMusic, playClickSound } = useMusic();
@@ -74,7 +80,7 @@ export default function Home() {
         point: 0
     })
 
-    const [historyData, setHistoryData] = useState([])
+    const [historyData, setHistoryData] = useState(HistoryPlaceholder);
 
     const getProfileData = async () => {
         try {
@@ -108,14 +114,14 @@ export default function Home() {
                 throw new Error('Invalid profile data received');
             }
 
-            console.log(profile, 'res data data');
+            // console.log(profile, 'res data data');
             setProfileData(profile);
 
             // Save userId to SecureStore
             await SecureStore.setItemAsync('userId', profile?.id.toString());
-            console.log(`UserId (${profile?.id}) saved to SecureStore`);
+            // console.log(`UserId (${profile?.id}) saved to SecureStore`);
         } catch (error) {
-            console.error('Error fetching profile data:', error);
+            // console.error('Error fetching profile data:', error);
             alert('Terjadi kesalahan. Silakan coba lagi.');
             router.replace('/login'); // Redirect to login on error
         } finally {
@@ -129,12 +135,12 @@ export default function Home() {
     const fetchHistory = async (userID, setHistoryItems) => {
         try {
 
-            console.log(userID, 'userID!')
+            // console.log(userID, 'userID!')
             // Retrieve auth token
             setIsFetching(true);
             const authToken = await SecureStore.getItemAsync('authToken');
             if (!authToken) {
-                console.error("Auth token is missing.");
+                // console.error("Auth token is missing.");
                 setIsFetching(false);
                 return;
             }
@@ -146,7 +152,7 @@ export default function Home() {
             });
 
             if (response.status !== 200) {
-                console.error("Failed to fetch history data.");
+                // console.error("Failed to fetch history data.");
                 setIsFetching(false);
                 return;
             }
@@ -161,8 +167,8 @@ export default function Home() {
                     ? item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose'
                     : item.win === parseInt(userID) ? 'win' : item.draw ? 'draw' : 'lose';
                 const opponentAvatar = isPlayer1
-                    ? item.player2_avatar || 'https://via.placeholder.com/64'
-                    : item.player1_avatar || 'https://via.placeholder.com/64';
+                    ? item.player2_avatar || 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Blank.jpg'
+                    : item.player1_avatar || 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Blank.jpg';
 
                 // console.log(opponentAvatar, 'opponentAvatar', isPlayer1, 'player1?')
 
@@ -173,14 +179,17 @@ export default function Home() {
                 };
             });
 
-            setHistoryItems(formattedData);
+            if (formattedData.length > 0) {
+                setHistoryItems(formattedData);
+            }
+
             setIsFetching(false);
         } catch (err) {
             setIsFetching(false);
             if (err.response?.status === 401) {
-                console.error("Authentication failed. Please check your token.");
+                // console.error("Authentication failed. Please check your token.");
             } else {
-                console.error("An error occurred while fetching data:", err.message);
+                // console.error("An error occurred while fetching data:", err.message);
             }
         }
     };
@@ -243,7 +252,7 @@ export default function Home() {
                         <Text style={{ fontFamily: 'Poppins-Bold' }}>{`Riwayat Permainan >`}</Text>
                     </TouchableOpacity>
                     <FlatList
-                        data={historyData}
+                        data={historyData.slice(0, 5)}
                         keyExtractor={(item) => item.id}
                         renderItem={renderItem}
                         horizontal={true}

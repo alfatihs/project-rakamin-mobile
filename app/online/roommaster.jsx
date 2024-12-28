@@ -45,11 +45,11 @@ export default function RoomMaster() {
     }, []);
 
     useEffect(() => {
-        console.log('get room id!')
+        // console.log('get room id!')
 
         const getRoomID = async () => {
             setFetchingRoomData(true);
-            console.log('fetching room data..!');
+            // console.log('fetching room data..!');
             try {
 
                 const authToken = await SecureStore.getItemAsync('authToken');
@@ -75,16 +75,16 @@ export default function RoomMaster() {
                 setPlayer1_name(response.data.data.p1.name);
                 setPlayer1_image(response.data.data.p1.avatar);
 
-                console.log(response.data.data.id, 'response data')
+                // console.log(response.data.data.id, 'response data')
                 await SecureStore.setItemAsync('roomID', response.data.data.id.toString());
                 await SecureStore.setItemAsync('position', 'player1');
 
             } catch (error) {
-                console.error(error);
+                // console.error(error);
                 Alert.alert('Error', 'Gagal membuat room. Silakan coba lagi.');
             } finally {
                 setFetchingRoomData(false);
-                console.log('done fetching room data!');
+                // console.log('done fetching room data!');
             }
         };
 
@@ -98,7 +98,6 @@ export default function RoomMaster() {
         const startFetching = async () => {
             try {
                 if (player1_name !== null && player2_name !== null) {
-                    console.log('gas!')
                     clearInterval(intervalId);
                     router.replace({
                         pathname: '/online/ready',
@@ -118,24 +117,26 @@ export default function RoomMaster() {
 
                     if (!isFetching) {
                         setIsFetching(true);
-                        console.log('feching room data.from room master..!')
+                        // console.log('feching room data.from room master..!')
 
                         try {
                             await getRoomData();
-                            console.log('result', player1_name, player2_name)
+                            // console.log('result', player1_name, player2_name)
 
                         } catch (error) {
-                            console.error('Error fetching room data:', error);
+                            alert('Error', 'Gagal mengambil data room. Silakan coba lagi.');
+                            // console.error('Error fetching room data:', error);
                         } finally {
                             setIsFetching(false);
-                            console.log('done fetching room data!')
+                            // console.log('done fetching room data!')
 
                         }
 
                     }
                 }, 3000);
             } catch (error) {
-                console.error('Error setting up periodic fetching:', error);
+                alert('Error', 'gagal mengambil data');
+                // console.error('Error setting up periodic fetching:', error);
             }
         };
 
@@ -159,7 +160,7 @@ export default function RoomMaster() {
             }
             // console.log('room id is ', roomID)
 
-            console.log('fetching room data..!')
+            // console.log('fetching room data..!')
 
             const response = await axios.post(
                 `https://project-rakamin-api.vercel.app/rooms/info`,
@@ -172,7 +173,7 @@ export default function RoomMaster() {
                     },
                 }
             );
-            console.log('Refetched room data:', response.data);
+            // console.log('Refetched room data:', response.data);
 
             setPlayer1_name(response.data.data.p1.name);
             setPlayer1_image(response.data.data.p1.avatar);

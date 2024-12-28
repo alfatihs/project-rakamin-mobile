@@ -24,7 +24,8 @@ export default function GameLoadingScreen() {
         setRoomId(storedRoomId);
         setBearerToken(storedToken);
       } catch (error) {
-        console.error("Error fetching credentials:", error.message);
+        alert('Room ID atau Token tidak valid');
+        // console.error("Error fetching credentials:", error.message);
       }
     };
 
@@ -37,7 +38,7 @@ export default function GameLoadingScreen() {
 
     setIsFetching(true);
     try {
-      console.log('fetching!')
+      // console.log('fetching!')
       const response = await fetch(
         `https://project-rakamin-api.vercel.app/rooms/info`,
         {
@@ -55,7 +56,7 @@ export default function GameLoadingScreen() {
       }
 
       const data = await response.json();
-      console.log(data.data, 'hasil response!')
+      // console.log(data.data, 'hasil response!')
       const { draw, win, lose, game_status } = data.data;
 
       setGameStatus(game_status);
@@ -65,7 +66,8 @@ export default function GameLoadingScreen() {
         router.replace("/online/resultOnline"); // Pindah ke halaman result
       }
     } catch (error) {
-      console.error("Error fetching game status:", error.message);
+      alert('Gagal mengambil status game');
+      // console.error("Error fetching game status:", error.message);
     } finally {
       setIsFetching(false); // Selesai fetching
     }

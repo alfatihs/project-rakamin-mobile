@@ -4,7 +4,7 @@ export default function Button(
   {
     text = "click me!",
     handlePress = () => {
-      console.log("clicked!");
+      // console.log("clicked!");
     },
   },
   widthtype = "full"

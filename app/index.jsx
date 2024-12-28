@@ -8,7 +8,7 @@ export default function Index() {
     useEffect(() => {
         const getAuthToken = async () => {
             const authToken = await SecureStore.getItemAsync('authToken');
-            console.log(authToken, 'hasil authtoken ');
+            // console.log(authToken, 'hasil authtoken ');
             if (authToken) {
                 router.replace('/(private)');
             } else {
