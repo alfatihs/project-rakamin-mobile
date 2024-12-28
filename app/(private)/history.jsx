@@ -99,13 +99,13 @@ export default function History() {
                 <BackButton onPress={() => { playClickSound(); router.back() }} />
             </View>
             <Text style={{ textAlign: 'center', fontSize: 18, color: '#0c356a', fontFamily: 'Poppins-Bold' }}>Riwayat Permainan</Text>
-            {isFetching ? <HistryPlaceholder /> :
+            {isFetching ? <HistryPlaceholder /> : historyItems.length > 0 ?
                 <FlatList
                     data={historyItems}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                     contentContainerStyle={{ gap: 25 }}
-                />}
+                /> : <Text style={{ textAlign: 'center', fontSize: 16, color: '#0c356a', fontFamily: 'Poppins-Regular' }}>Tidak ada riwayat permainan</Text>}
         </ImageBackground>
     );
 }

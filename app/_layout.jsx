@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
-import { useEffect, useRef } from 'react';
-import { Audio } from 'expo-av';
+import { StatusBar } from 'expo-status-bar';
 
 import { MusicProvider } from './providers/MusicProvider';
 
@@ -41,6 +40,7 @@ export default function Layout() {
 
     return (
         <MusicProvider>
+            <StatusBar></StatusBar>
             <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen name="login" options={{ headerShown: false }} />

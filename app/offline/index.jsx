@@ -13,7 +13,7 @@ export default function PrepareGameScreen() {
     if (countdown <= 0 && !hasNavigated) {
       // Navigasi hanya jika countdown selesai dan belum navigasi
       setHasNavigated(true); // Tandai navigasi sudah terjadi
-      router.push("/offline/gameScreenOffline");
+      router.replace("/offline/gameScreenOffline");
       return;
     }
 
