@@ -118,7 +118,7 @@ export default function RoomMaster() {
 
                     if (!isFetching) {
                         setIsFetching(true);
-                        console.log('feching room data...!')
+                        console.log('feching room data.from room master..!')
 
                         try {
                             await getRoomData();

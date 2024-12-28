@@ -10,6 +10,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import HomePlaceholder from "../../components/HomePlaceholder";
 import { useMusic } from "../providers/MusicProvider";
 import { Ionicons } from '@expo/vector-icons';
+// import Ready from "../online/ready";
 
 
 const PROFILE_API_URL = "https://project-rakamin-api.vercel.app/profile";

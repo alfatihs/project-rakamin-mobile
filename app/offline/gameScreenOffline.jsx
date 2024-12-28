@@ -78,7 +78,7 @@ export default function GameScreenOffline() {
       setScores((prev) => ({ ...prev, computer: prev.computer + 1 }));
     }
 
-    router.push({
+    router.replace({
       pathname: "/offline/result",
       params: {
         userChoice: userChoice || "none",

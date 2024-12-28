@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import PlayerCard from "../../components/PlayerCard";
 
 export default function Ready() {
-    const { player1_name, player2_name, player1_image, player2_image } = useLocalSearchParams();
+    const { player1_name, player2_name, player1_image, player2_image, roomID } = useLocalSearchParams();
 
     const router = useRouter();
     const [countdown, setCountdown] = useState(3);
@@ -28,6 +28,7 @@ export default function Ready() {
 
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFBF0" }}>
+            <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 24, textAlign: 'center', position: 'absolute', top: 100 }}>{`Room ID : ${roomID}`}</Text>
             {showCountdown ? (
                 <Text style={{ fontSize: 64, fontFamily: 'Poppins-Bold', color: "#0c356a" }}>
                     {countdown > 0 ? countdown : ""}

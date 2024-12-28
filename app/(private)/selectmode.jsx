@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { set } from "zod";
 import { useMusic } from "../providers/MusicProvider";
+import BackButton from "../../components/BackButton";
 
 
 export default function SelectMode() {
@@ -69,6 +70,13 @@ export default function SelectMode() {
             resizeMode="cover"
             style={{ flex: 1, gap: 50 }}
         >
+            <View style={{ backgroundColor: 'white', borderRadius: 100, position: 'absolute', top: 15, left: 15 }}>
+                <BackButton onPress={() => {
+                    playClickSound()
+                    router.back()
+                }}></BackButton>
+            </View>
+
             {modalVisible && <ModalOverlay />}
             <View style={{ paddingHorizontal: 35, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 

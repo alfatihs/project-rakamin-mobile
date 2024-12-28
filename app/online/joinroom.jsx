@@ -53,6 +53,7 @@ export default function JoinRoom() {
             if (response.data.data.gameStatus === 'playing') {
                 console.log('room is active, getting room data..')
                 await SecureStore.setItemAsync('roomID', response.data.data.roomId.toString());
+                await SecureStore.setItemAsync('position', 'player2');
                 router.replace({
                     pathname: '/online/ready',
                     params: {
@@ -93,6 +94,7 @@ export default function JoinRoom() {
                 value={roomID}
                 onChangeText={(text) => setRoomID(text)}
                 placeholder="Masukkan kode Arena..."
+                keyboardType="number-pad"
                 style={{
                     borderWidth: 2,
                     borderRadius: 8,
@@ -104,8 +106,8 @@ export default function JoinRoom() {
                     fontSize: 14, marginBottom: 200
                 }}
             ></TextInput>
-            
-            <Button  text='Masuk Arena' onPress={() => { playClickSound(); handleJoinRoom() }} bgColor="#0C356A"></Button>
+
+            <Button text='Masuk Arena' onPress={() => { playClickSound(); handleJoinRoom() }} bgColor="#0C356A"></Button>
 
         </ImageBackground>
     )
