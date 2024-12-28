@@ -39,7 +39,7 @@ export default function RoomMaster() {
                 ]
             );
             router.replace('/login');
-        }, 60000);
+        }, 120000);
 
         return () => clearTimeout(timeoutId);
     }, []);
