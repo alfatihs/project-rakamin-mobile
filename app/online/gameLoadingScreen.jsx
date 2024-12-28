@@ -8,6 +8,7 @@ export default function GameLoadingScreen() {
   const [isFetching, setIsFetching] = useState(false);
   const [roomId, setRoomId] = useState(null);
   const [bearerToken, setBearerToken] = useState(null);
+  const [gameStatus, setGameStatus] = useState('playing');
 
   // Ambil roomId dan bearerToken dari SecureStorage saat komponen dimount
   useEffect(() => {
@@ -55,11 +56,13 @@ export default function GameLoadingScreen() {
 
       const data = await response.json();
       console.log(data.data, 'hasil response!')
-      const { draw, win, lose } = data.data;
+      const { draw, win, lose, game_status } = data.data;
+
+      setGameStatus(game_status);
 
       // Logika untuk menentukan kapan navigasi ke result
       if ((draw && win === null && lose === null) || (!draw && (win !== null || lose !== null))) {
-        router.push("/online/resultOnline"); // Pindah ke halaman result
+        router.replace("/online/resultOnline"); // Pindah ke halaman result
       }
     } catch (error) {
       console.error("Error fetching game status:", error.message);
@@ -72,10 +75,14 @@ export default function GameLoadingScreen() {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchGameStatus();
+      if (gameStatus === 'finished') {
+        clearInterval(interval);
+      }
     }, 2000); // Cek setiap 2 detik
 
     return () => clearInterval(interval); // Bersihkan interval saat komponen unmount
-  }, [roomId, bearerToken]);
+
+  }, [roomId, bearerToken, gameStatus]);
 
   return (
     <View style={styles.container}>

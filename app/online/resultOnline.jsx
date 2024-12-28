@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Image, StyleSheet, Modal, TouchableOpacity, Text } from "react-native";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import axios from "axios";
 
 // Gesture images for player 1 (blue shirt)
 const userGestures = {
@@ -39,6 +40,7 @@ export default function ResultScreenOnline() {
   const [roomId, setRoomId] = useState(null);
   const [bearerToken, setBearerToken] = useState(null);
   const [localUserId, setLocalUserId] = useState(null);
+  const [position, setPosition] = useState(null);
 
   // Fetch roomId, bearerToken, and userId
   useEffect(() => {
@@ -47,6 +49,7 @@ export default function ResultScreenOnline() {
         const token = await SecureStore.getItemAsync("authToken");
         const roomID = await SecureStore.getItemAsync("roomID");
         const userId = await SecureStore.getItemAsync("userId"); // Simpan user ID lokal di SecureStore
+        const position = await SecureStore.getItemAsync("position"); // Simpan posisi player di SecureStore
         console.log('token', token, 'roomID', roomID, 'userId', userId)
         if (token && roomID && userId) {
           setBearerToken(token);
@@ -54,6 +57,12 @@ export default function ResultScreenOnline() {
           setLocalUserId(userId); // Set user ID lokal
         } else {
           console.error("Bearer token, room ID, atau user ID tidak ditemukan.");
+        }
+        if (position) {
+          setPosition(position);
+          console.log('position', position)
+        } else {
+          console.error("posisi player tidak ditemukan.");
         }
       } catch (error) {
         console.error("Error fetching credentials:", error.message);
@@ -69,6 +78,7 @@ export default function ResultScreenOnline() {
       if (!roomId || !bearerToken || !localUserId) return;
 
       try {
+        console.log('fetching from result online!')
         const response = await fetch(
           "https://project-rakamin-api.vercel.app/rooms/info",
           {
@@ -111,6 +121,48 @@ export default function ResultScreenOnline() {
 
     fetchGameData();
   }, [roomId, bearerToken, localUserId]);
+
+
+  const handlePlayAgain = async () => {
+    if (position === 'player1') {
+      router.replace('/online/roommaster')
+    }
+    else if (position === 'player2') {
+      router.replace('/online/joinroom')
+    } else {
+      console.error('posisi player tidak ditemukan atau tidak valid')
+    }
+  }
+
+  // const handlePlayAgain = async () => {
+  //   try {
+  //     console.log('playing again!')
+  //     const response = await fetch(
+  //       "https://project-rakamin-api.vercel.app/play/again",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${bearerToken}`,
+  //         },
+  //         body: JSON.stringify({ roomId: roomId }),
+  //       }
+  //     );
+
+  //     console.log('bearer token', bearerToken, 'room id', roomId, 'response', response)
+
+  //     const data = await response.json();
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to play again.");
+  //     }
+
+  //     console.log("Played again! user ID: ", localUserId, 'data:', data);
+
+  //   } catch (error) {
+  //     console.error("Error playing again:", error.message);
+  //   }
+  // }
 
   return (
     <View style={styles.container}>
@@ -166,7 +218,7 @@ export default function ResultScreenOnline() {
             {result && <Image source={resultImages[result]} style={styles.resultImage} />}
 
             {/* Play Again Button */}
-            <TouchableOpacity onPress={() => router.replace("/playAgain")}>
+            <TouchableOpacity onPress={handlePlayAgain}>
               <Image source={playAgainButtonImage} style={styles.playAgainButton} />
             </TouchableOpacity>
           </View>

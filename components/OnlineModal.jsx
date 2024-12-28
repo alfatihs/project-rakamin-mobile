@@ -5,9 +5,9 @@ import { router } from 'expo-router';
 const onlineModalImage = require('./../assets/room-modals.png');
 
 const handleBuatArena = () => {
-    const roomID = '123456';
-    console.log('Join room with ID:', roomID);
-    router.push('online/roommaster', { roomID: roomID });
+    // const roomID = '123456';
+    // console.log('Join room with ID:', roomID);
+    router.push('online/roommaster');
 }
 
 const handleGabungArena = () => {
